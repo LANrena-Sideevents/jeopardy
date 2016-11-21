@@ -1,0 +1,35 @@
+group 'de.de.lanrena'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    ext.kotlin_version = '1.0.5-2'
+    ext.spring_version = '1.4.2.RELEASE'
+
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:$spring_version")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+
+repositories {
+    mavenCentral()
+}
+
+jar {
+    baseName = "$name"
+    version =  "$version"
+}
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter-thymeleaf:$spring_version"
+    compile "org.springframework.boot:spring-boot-starter-websocket:$spring_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile 'com.intellij:annotations:12.0'
+}
