@@ -1,1 +1,11 @@
-admin backend
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<h1>Connected Screens</h1>
+<ul>
+    <li th:each="screen : ${screens}">
+        <span>${screen.uuid}</span>
+    </li>
+</ul>
+</body>
+</html>
