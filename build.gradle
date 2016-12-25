@@ -1,14 +1,14 @@
-group 'de.de.lanrena'
+group 'de.lanrena'
 version '1.0-SNAPSHOT'
 
 buildscript {
     ext.kotlin_version = '1.0.5-2'
     ext.spring_version = '1.4.2.RELEASE'
 
-
     repositories {
         mavenCentral()
     }
+
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath("org.springframework.boot:spring-boot-gradle-plugin:$spring_version")
@@ -25,7 +25,7 @@ repositories {
 
 jar {
     baseName = "$name"
-    version =  "$version"
+    version = "$version"
 }
 
 dependencies {
