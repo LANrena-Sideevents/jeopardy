@@ -2,6 +2,21 @@ package de.lanrena.jeopardy.model
 
 import java.util.*
 
-data class Game (
-        val id : UUID,
-        val players : List<Player>)
+enum class State {
+    Setup,
+    Ongoing,
+    Finished
+}
+
+class Game() {
+    val id : UUID
+    val players : MutableList<Player>
+    var state: State
+
+    init {
+        id = UUID.randomUUID()
+        players = ArrayList<Player>()
+        state = State.Setup
+    }
+
+}
