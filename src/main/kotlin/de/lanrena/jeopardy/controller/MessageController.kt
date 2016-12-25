@@ -1,6 +1,5 @@
 package de.lanrena.jeopardy.controller
 
-import de.lanrena.jeopardy.model.Game
 import de.lanrena.jeopardy.view.global.GameListResult
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.handler.annotation.MessageMapping
@@ -9,6 +8,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.socket.WebSocketMessage
 
 @Controller
+@Suppress("unused")
 open class MessageController(
         @Autowired val jeopardyController: JeopardyController) {
 

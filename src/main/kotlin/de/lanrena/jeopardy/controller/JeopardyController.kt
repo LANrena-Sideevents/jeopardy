@@ -1,6 +1,7 @@
 package de.lanrena.jeopardy.controller
 
 import de.lanrena.jeopardy.model.Game
+import de.lanrena.jeopardy.model.State
 import de.lanrena.jeopardy.view.global.GameListResult
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.simp.SimpMessagingTemplate
@@ -21,6 +22,6 @@ class JeopardyController() {
     }
 
     fun listGames(): List<Game> {
-        return games
+        return games.filter { it.state!=State.Finished }
     }
 }
