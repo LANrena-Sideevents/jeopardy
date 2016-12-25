@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         });
 
         stompClient.subscribe('/topic/messages', function (msg) {
-            updateState(msg)
+            updateState(JSON.parse(msg.body).payload)
         });
 
         updateState("Connected");
