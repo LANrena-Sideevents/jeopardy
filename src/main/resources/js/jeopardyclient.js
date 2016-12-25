@@ -1,19 +1,49 @@
 var stompClient;
+var subscribedGame = -1;
 
-var updateState = function (newState) {
+const updateState = function (newState) {
     document.getElementById('message').innerText = newState
 };
 
-var subscribeToGame = function (game_id) {
+const handleGameAction = function() {
 
-}
+};
 
-var handleGameAdded = function (game_info) {
+const subscribeToGame = function (game_id) {
+    stompClient.subscribe('/topic/game/' + game_id, function () {
+        handleGameAction();
+    });
+
+    document.getElementById('gamelist').style.visibility = "hidden";
+    document.getElementById('playerlist').style.visibility = "visible";
+    stompClient.send("/app/game/" + game_id + "/");
+};
+
+const handleGameAdded = function (game_info) {
+    if (subscribedGame != -1)
+    {
+        return;
+    }
+
     for (game of JSON.parse(game_info))
     {
-        var node = document.createElement("li");
+        let node = document.createElement("li");
         node.innerText = game.id;
-        document.getElementById('gamelist').appendChild(node);
+        node.onclick = function(e) {
+            subscribeToGame.apply(null, [game.id]);
+        };
+
+        let gamelist = document.getElementById('gamelist');
+        let duplicate = false;
+        for (it of gamelist.children)
+        {
+            duplicate |= (it.innerText === game.id);
+        }
+
+        if (!duplicate)
+        {
+            gamelist.appendChild(node);
+        }
     }
 };
 

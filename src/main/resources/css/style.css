@@ -2,6 +2,12 @@
 	display: none;
 }
 
+#gamelist li {
+	text-decoration: underline;
+	color: blue;
+	cursor: pointer;
+}
+
 #gameboard {
 	display: none;
 }
