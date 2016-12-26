@@ -6,7 +6,7 @@ const updateState = function (newState) {
 };
 
 const handleGameAction = function() {
-
+    // switch ()
 };
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -22,11 +22,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 node.innerText = game.id;
                 node.onclick = function() {
                     stompClient.unsubscribe('/topic/games');
-                    stompClient.subscribe('/topic/game/' + game.id, function () {
-                        handleGameAction();
+                    stompClient.subscribe('/topic/game/' + game.id, function (message) {
+                        handleGameAction(JSON.parse(message));
                     });
-                    document.getElementById('gamelist').style.visibility = "hidden";
-                    document.getElementById('playerlist').style.visibility = "visible";
+                    document.getElementById('waitingroom').style.display = "none";
+                    document.getElementById('gameboard').style.display = "table";
                 };
 
                 document.getElementById('gamelist').appendChild(node);
