@@ -15,14 +15,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
     stompClient.connect({}, function () {
         stompClient.subscribe('/topic/games', function (game_result) {
-            let game_info = JSON.parse(game_result.body)['payload'];
-            for (let game of game_info)
+            let game_ids = JSON.parse(game_result.body)['payload'];
+            for (let game_id of game_ids)
             {
                 let node = document.createElement("li");
-                node.innerText = game.id;
+                node.innerText = game_id;
                 node.onclick = function() {
                     stompClient.unsubscribe('/topic/games');
-                    stompClient.subscribe('/topic/game/' + game.id, function (message) {
+                    stompClient.subscribe('/topic/game/' + game_id, function (message) {
                         handleGameAction(JSON.parse(message));
                     });
                     document.getElementById('waitingroom').style.display = "none";
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
 
         stompClient.subscribe('/topic/messages', function (msg) {
-            updateState(JSON.parse(msg.body).payload)
+            updateState(JSON.parse(msg.body)['payload'])
         });
 
         updateState("Connected");

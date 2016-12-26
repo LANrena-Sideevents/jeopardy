@@ -6,4 +6,4 @@ import de.lanrena.jeopardy.view.JsonMessage
 class GameListResultEvent(vararg listGames: Game)
     : JsonMessage(
         type = "GameListResultEvent",
-        payload = listGames.toList())
+        payload = listGames.map(Game::id))
