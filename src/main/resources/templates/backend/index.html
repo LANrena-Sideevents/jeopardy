@@ -2,13 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 <h1>Games</h1>
-<ul>
-    <li th:each="game : ${games}">
-        <span th:text="${game.id}"/>
-    </li>
-</ul>
 <form action="/backend/game" method="post">
     <input type="submit" value="Create Game"/>
 </form>
+<ul>
+    <li th:each="game : ${games}">
+        <a th:text="${game.id}" th:href="@{|/backend/game/${game.id}|}"/>
+    </li>
+</ul>
 </body>
 </html>

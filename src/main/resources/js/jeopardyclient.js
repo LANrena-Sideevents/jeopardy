@@ -1,4 +1,6 @@
+//noinspection ES6ConvertVarToLetConst
 var stompClient;
+//noinspection ES6ConvertVarToLetConst
 var subscribedGame = -1;
 
 const updateState = function (newState) {
@@ -25,17 +27,17 @@ const handleGameAdded = function (game_info) {
         return;
     }
 
-    for (game of JSON.parse(game_info))
+    for (let game of JSON.parse(game_info))
     {
         let node = document.createElement("li");
         node.innerText = game.id;
-        node.onclick = function(e) {
+        node.onclick = function() {
             subscribeToGame.apply(null, [game.id]);
         };
 
         let gamelist = document.getElementById('gamelist');
         let duplicate = false;
-        for (it of gamelist.children)
+        for (let it of gamelist.children)
         {
             duplicate |= (it.innerText === game.id);
         }
@@ -47,8 +49,8 @@ const handleGameAdded = function (game_info) {
     }
 };
 
-document.addEventListener("DOMContentLoaded", function(event) {
-    var socket = new SockJS('http://[::1]:8080/jeopardy');
+document.addEventListener("DOMContentLoaded", function() {
+    const socket = new SockJS('http://[::1]:8080/jeopardy');
     stompClient = Stomp.over(socket);
 
     stompClient.connect({}, function () {

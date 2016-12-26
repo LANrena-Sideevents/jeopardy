@@ -12,7 +12,7 @@ class JeopardyController() {
     @Autowired
     private var template: SimpMessagingTemplate? = null
 
-    private val games : MutableList<Game> =
+    private val games: MutableList<Game> =
             Collections.synchronizedList(mutableListOf())
 
     fun createGame() {
@@ -22,6 +22,10 @@ class JeopardyController() {
     }
 
     fun listGames(): List<Game> {
-        return games.filter { it.state!=State.Finished }
+        return games.filter { it.state != State.Finished }
+    }
+
+    fun findGame(id: UUID): Game? {
+        return games.filter { it.id == id }.firstOrNull()
     }
 }
