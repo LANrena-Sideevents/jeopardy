@@ -1,7 +1,5 @@
 //noinspection ES6ConvertVarToLetConst
 var stompClient;
-//noinspection ES6ConvertVarToLetConst
-var subscribedGame = -1;
 
 const updateState = function (newState) {
     document.getElementById('message').innerText = newState
@@ -12,21 +10,16 @@ const handleGameAction = function() {
 };
 
 const subscribeToGame = function (game_id) {
+    stompClient.unsubscribe('/topic/games');
     stompClient.subscribe('/topic/game/' + game_id, function () {
         handleGameAction();
     });
 
     document.getElementById('gamelist').style.visibility = "hidden";
     document.getElementById('playerlist').style.visibility = "visible";
-    stompClient.send("/app/game/" + game_id + "/");
 };
 
 const handleGameAdded = function (game_info) {
-    if (subscribedGame != -1)
-    {
-        return;
-    }
-
     for (let game of JSON.parse(game_info))
     {
         let node = document.createElement("li");
@@ -35,17 +28,7 @@ const handleGameAdded = function (game_info) {
             subscribeToGame.apply(null, [game.id]);
         };
 
-        let gamelist = document.getElementById('gamelist');
-        let duplicate = false;
-        for (let it of gamelist.children)
-        {
-            duplicate |= (it.innerText === game.id);
-        }
-
-        if (!duplicate)
-        {
-            gamelist.appendChild(node);
-        }
+        document.getElementById('gamelist').appendChild(node);
     }
 };
 
@@ -63,7 +46,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
 
         updateState("Connected");
-        stompClient.send("/app/list_games");
     });
 
     updateState("Contacting server...");

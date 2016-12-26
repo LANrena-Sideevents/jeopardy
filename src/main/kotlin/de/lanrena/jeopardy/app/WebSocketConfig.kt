@@ -11,8 +11,7 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry
 open class WebSocketConfig : AbstractWebSocketMessageBrokerConfigurer() {
 
     override fun configureMessageBroker(config: MessageBrokerRegistry) {
-        config.setApplicationDestinationPrefixes("/app")
-                .enableSimpleBroker("/topic")
+        config.enableSimpleBroker("/topic")
     }
 
     override fun registerStompEndpoints(registry: StompEndpointRegistry) {
