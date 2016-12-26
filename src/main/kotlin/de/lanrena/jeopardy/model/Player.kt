@@ -1,16 +1,9 @@
 package de.lanrena.jeopardy.model
 
-data class Color(
-        val red : Byte,
-        val blue : Byte,
-        val green : Byte)
-{
-    override fun toString(): String {
-        return "#ff" + red + blue + green
-    }
-}
+import java.util.*
 
 data class Player(
-        val name : String,
-        var points : Int,
-        val color : Color)
+        val id: UUID = UUID.randomUUID(),
+        val name: String,
+        var points: Int = 0,
+        val color: String = "#000000")

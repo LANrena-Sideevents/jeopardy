@@ -2,5 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 <h1 th:text="${game.id}"/>
+<form th:action="@{|/backend/game/${game.id}/player|}" method="post">
+    <input type="text" name="player_name" required="required" />
+    <input type="color" name="player_color" required="required" />
+    <input type="submit" value="Add Player" />
+</form>
+<ul>
+    <li th:each="player : ${game.players}">
+        <span th:text="${player.name}"/>
+        <a th:href="@{|/backend/game/${player.id}|}">X</a>
+    </li>
+</ul>
 </body>
 </html>

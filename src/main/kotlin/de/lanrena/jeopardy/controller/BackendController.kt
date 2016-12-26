@@ -5,10 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @Controller
@@ -28,6 +25,14 @@ open class BackendController(
     fun game(@PathVariable("gameid") gameId: UUID, model: Model): String {
         model.addAttribute("game", gameState.findGame(gameId))
         return "backend/game"
+    }
+
+    @PostMapping("/game/{gameid}/player")
+    fun add_player(@PathVariable("gameid") gameId: UUID,
+                   @RequestParam("player_name") player_name: String,
+                   @RequestParam("player_color") player_color: String): String {
+        gameState.addPlayer(gameId, player_name, player_color)
+        return "redirect:/backend/game/" + gameId
     }
 
     @PostMapping(value = "game")
