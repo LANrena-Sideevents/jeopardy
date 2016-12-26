@@ -1,10 +1,15 @@
 package de.lanrena.jeopardy.controller
 
+import de.lanrena.jeopardy.model.Game
+import de.lanrena.jeopardy.view.JsonMessage
+import de.lanrena.jeopardy.view.global.CombinedEvent
 import de.lanrena.jeopardy.view.global.GameListResultEvent
+import de.lanrena.jeopardy.view.scoreboard.AddPlayerEvent
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.messaging.handler.annotation.DestinationVariable
 import org.springframework.messaging.simp.annotation.SubscribeMapping
 import org.springframework.stereotype.Controller
-import org.springframework.web.socket.WebSocketMessage
+import java.util.*
 
 @Controller
 @Suppress("unused")
@@ -15,5 +20,15 @@ open class MessageController(
     fun list_games(): Any {
         return GameListResultEvent(*jeopardyController
                 .listGames().toTypedArray())
+    }
+
+    @SubscribeMapping("/topic/game/{gameid}")
+    fun subscribe_game(@DestinationVariable("gameid") gameId: UUID): Any? {
+        val game: Game = jeopardyController.findGame(gameId) ?: return null
+
+        val initialData: MutableList<JsonMessage> = mutableListOf()
+        initialData.addAll(game.players.map(::AddPlayerEvent))
+
+        return CombinedEvent(initialData)
     }
 }

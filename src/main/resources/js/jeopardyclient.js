@@ -5,8 +5,29 @@ const updateState = function (newState) {
     document.getElementById('message').innerText = newState
 };
 
-const handleGameAction = function() {
-    // switch ()
+const handleGameAction = function(message) {
+    switch (message['type'])
+    {
+        case "CombinedEvent":
+            for (let event of message['payload'])
+                handleGameAction(event);
+            break;
+
+        case "AddPlayerEvent":
+            let player = message['payload'];
+            let node = document.createElement("li");
+            node.innerText = player['name'];
+
+            let score = document.createElement("span");
+            score.className += 'score';
+            score.innerText = player['points'];
+            node.appendChild(score);
+
+            let players = document.getElementById('players');
+            players.appendChild(node);
+
+            break;
+    }
 };
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -23,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 node.onclick = function() {
                     stompClient.unsubscribe('/topic/games');
                     stompClient.subscribe('/topic/game/' + game_id, function (message) {
-                        handleGameAction(JSON.parse(message));
+                        handleGameAction(JSON.parse(message.body));
                     });
                     document.getElementById('waitingroom').style.display = "none";
                     document.getElementById('gameboard').style.display = "table";
