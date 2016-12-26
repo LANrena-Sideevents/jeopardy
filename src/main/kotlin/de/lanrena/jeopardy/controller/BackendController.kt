@@ -15,15 +15,19 @@ open class BackendController(
         @Autowired val template: SimpMessagingTemplate,
         @Autowired val gameState: JeopardyController) {
 
-    @GetMapping("")
+    @GetMapping("", "/index")
     fun index(model: Model): String {
         model.addAttribute("games", gameState.listGames())
         return "backend/index"
     }
 
+    @GetMapping("/game")
+    fun preventStackTrace(): String =  "redirect:/backend/index"
+
     @GetMapping("/game/{gameid}")
-    fun game(@PathVariable("gameid") gameId: UUID, model: Model): String {
-        model.addAttribute("game", gameState.findGame(gameId))
+    fun game(@PathVariable("gameid") gameId: UUID?, model: Model): String {
+        val findGame = gameState.findGame(gameId!!) ?: return "redirect:/backend/index"
+        model.addAttribute("game", findGame)
         return "backend/game"
     }
 
