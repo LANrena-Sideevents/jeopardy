@@ -1,6 +1,6 @@
 package de.lanrena.jeopardy.controller
 
-import de.lanrena.jeopardy.view.global.DisplayMessage
+import de.lanrena.jeopardy.view.global.DisplayMessageEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.stereotype.Controller
@@ -43,7 +43,7 @@ open class BackendController(
 
     @GetMapping("/message")
     fun send_message(): String {
-        template.convertAndSend("/topic/messages", DisplayMessage("asdf test 123"))
+        template.convertAndSend("/topic/messages", DisplayMessageEvent("asdf test 123"))
         return "redirect:/backend"
     }
 }

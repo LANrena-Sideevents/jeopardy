@@ -3,8 +3,8 @@ package de.lanrena.jeopardy.controller
 import de.lanrena.jeopardy.model.Game
 import de.lanrena.jeopardy.model.Player
 import de.lanrena.jeopardy.model.State
-import de.lanrena.jeopardy.view.global.GameListResult
-import de.lanrena.jeopardy.view.scoreboard.AddPlayer
+import de.lanrena.jeopardy.view.global.GameListResultEvent
+import de.lanrena.jeopardy.view.scoreboard.AddPlayerEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import java.util.*
@@ -20,7 +20,7 @@ class JeopardyController() {
     fun createGame() {
         val element = Game()
         games.add(element)
-        template?.convertAndSend("/topic/games", GameListResult(element))
+        template?.convertAndSend("/topic/games", GameListResultEvent(element))
     }
 
     fun listGames(): List<Game> {
@@ -37,6 +37,6 @@ class JeopardyController() {
                 color = color)
 
         findGame(gameId)?.players?.add(player)
-        template?.convertAndSend("/topic/game/" + gameId, AddPlayer(player))
+        template?.convertAndSend("/topic/game/" + gameId, AddPlayerEvent(player))
     }
 }

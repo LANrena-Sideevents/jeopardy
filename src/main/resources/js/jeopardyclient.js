@@ -15,8 +15,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
     stompClient.connect({}, function () {
         stompClient.subscribe('/topic/games', function (game_result) {
-            let game_info = JSON.parse(game_result.body).payload;
-            for (let game of JSON.parse(game_info))
+            let game_info = JSON.parse(game_result.body)['payload'];
+            for (let game of game_info)
             {
                 let node = document.createElement("li");
                 node.innerText = game.id;
