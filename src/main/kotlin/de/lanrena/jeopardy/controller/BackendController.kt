@@ -39,7 +39,7 @@ open class BackendController(
         return "redirect:/backend/game/" + gameId
     }
 
-    @PostMapping(value = "game")
+    @PostMapping("game")
     fun create_game(): String {
         gameState.createGame()
         return "redirect:/backend"

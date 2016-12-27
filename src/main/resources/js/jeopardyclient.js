@@ -1,16 +1,13 @@
-//noinspection ES6ConvertVarToLetConst
-var stompClient;
-
 const updateState = function (newState) {
     document.getElementById('message').innerText = newState
 };
 
-const handleGameAction = function(message) {
+const handleGameAction = function(message, client) {
     switch (message['type'])
     {
         case "CombinedEvent":
             for (let event of message['payload'])
-                handleGameAction(event);
+                handleGameAction(event, client);
             break;
 
         case "AddPlayerEvent":
@@ -25,14 +22,12 @@ const handleGameAction = function(message) {
 
             let players = document.getElementById('players');
             players.appendChild(node);
-
             break;
     }
 };
 
 document.addEventListener("DOMContentLoaded", function() {
-    const socket = new SockJS('http://[::1]:8080/jeopardy');
-    stompClient = Stomp.over(socket);
+    const stompClient = Stomp.over(new SockJS('http://[::1]:8080/jeopardy'));
 
     stompClient.connect({}, function () {
         stompClient.subscribe('/topic/games', function (game_result) {
@@ -44,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 node.onclick = function() {
                     stompClient.unsubscribe('/topic/games');
                     stompClient.subscribe('/topic/game/' + game_id, function (message) {
-                        handleGameAction(JSON.parse(message.body));
+                        handleGameAction(JSON.parse(message.body), stompClient);
                     });
                     document.getElementById('waitingroom').style.display = "none";
                     document.getElementById('gameboard').style.display = "table";
