@@ -23,6 +23,12 @@ const handleGameAction = function(message, client) {
             let players = document.getElementById('players');
             players.appendChild(node);
             break;
+
+        case "RemoveFieldEvent":
+            let field = document.getElementById(message['payload']['field']);
+            field.style.background = message['payload']['color'];
+            field.innerText = '';
+            break;
     }
 };
 
