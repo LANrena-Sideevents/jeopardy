@@ -2,7 +2,7 @@ group 'de.lanrena'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.0.5-3'
+    ext.kotlin_version = '1.0.6'
     ext.spring_version = '1.4.2.RELEASE'
 
     repositories {
