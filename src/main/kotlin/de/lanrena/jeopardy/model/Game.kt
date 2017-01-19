@@ -8,15 +8,8 @@ enum class State {
     Finished
 }
 
-class Game() {
-    val id : UUID
-    val players : MutableList<Player>
-    var state: State
-
-    init {
-        id = UUID.randomUUID()
-        players = ArrayList<Player>()
-        state = State.Setup
-    }
-
+class Game {
+    val id : UUID = UUID.randomUUID()
+    val players : MutableList<Player> = ArrayList()
+    var state: State = State.Setup
 }
