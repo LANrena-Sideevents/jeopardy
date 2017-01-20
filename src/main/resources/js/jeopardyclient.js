@@ -33,7 +33,7 @@ const handleGameAction = function(message, client) {
 };
 
 document.addEventListener("DOMContentLoaded", function() {
-    const stompClient = Stomp.over(new SockJS('http://[::1]:8080/jeopardy'));
+    const stompClient = Stomp.over(new SockJS('http://' + window.location.host + '/jeopardy'));
 
     stompClient.connect({}, function () {
         stompClient.subscribe('/topic/games', function (game_result) {
