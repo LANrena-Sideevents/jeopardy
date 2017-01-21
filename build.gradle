@@ -3,7 +3,7 @@ version '1.0-SNAPSHOT'
 
 buildscript {
     ext.kotlin_version = '1.0.6'
-    ext.spring_version = '1.4.2.RELEASE'
+    ext.spring_version = '1.4.3.RELEASE'
 
     repositories {
         mavenCentral()
