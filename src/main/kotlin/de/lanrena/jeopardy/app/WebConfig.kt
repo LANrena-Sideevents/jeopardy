@@ -17,5 +17,8 @@ open class WebConfig : WebMvcConfigurerAdapter() {
 
         registry.addResourceHandler("/fonts/**")
                 .addResourceLocations("classpath:/fonts/")
+
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/")
     }
 }
