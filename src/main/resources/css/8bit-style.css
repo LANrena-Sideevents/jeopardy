@@ -1,0 +1,89 @@
+@font-face {
+    font-family: 'PressStart2P';
+    src: url('../fonts/PressStart2P.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    background: #000;
+    color: #fff;
+    font-family: 'PressStart2P', sans-serif;
+}
+
+#waitingroom li {
+    line-height: 1.6em;
+}
+
+#gamelist li {
+    text-decoration: underline;
+    color: blue;
+    cursor: pointer;
+}
+
+#gameboard {
+    border-spacing: 20px;
+}
+
+#gameboard th {
+    height: 1.5em;
+}
+
+#gameboard td:not(#scoreboard) {
+    box-shadow: 10px 10px 0 0 rgba(102,102,102,1);
+    text-align: center;
+    font-family: 'PressStart2P', sans-serif;
+    font-size: x-large;
+    text-overflow: clip;
+    overflow: hidden;
+    color: #000;
+}
+
+#row1col1, #row2col1, #row1col2 {
+    background: #F00;
+}
+
+#row1col3, #row2col2, #row3col1 {
+    background: #FF7F00;
+}
+
+#row1col4, #row2col3, #row3col2, #row4col1 {
+    background: #FFFF00;
+}
+
+#row1col5, #row2col4, #row3col3, #row4col2, #row5col1 {
+    background: #0F0;
+}
+
+#row2col5, #row3col4, #row4col3, #row5col2 {
+    background: #00F;
+}
+
+#row3col5, #row4col4, #row5col3 {
+    background: #4B0082;
+}
+
+#row4col5, #row5col4, #row5col5 {
+    background: #9400D3;
+}
+
+#gameboard td:not(#scoreboard).disabled {
+    box-shadow: inset 10px 10px 0 0 rgba(102,102,102,1);
+    background: #888;
+}
+
+#scoreboard {
+    vertical-align: top;
+    font-size: x-large;
+}
+
+#scoreboard li {
+    list-style: none;
+}
+
+span.score {
+    padding-top: 5px;
+    font-style: italic;
+    font-size: large;
+    float: right;
+}

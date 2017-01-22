@@ -1,0 +1,30 @@
+#waitingroom {
+    /*display: none;*/
+}
+
+#gameboard {
+    display: none;
+    width: 100%;
+    height: 100%;
+    table-layout: fixed;
+    float: left;
+}
+
+#gameboard th {
+    height: 1.5em;
+}
+
+#gameboard td:not(#scoreboard) {
+    font-size: x-large;
+    text-overflow: clip;
+    overflow: hidden;
+}
+
+#scoreboard {
+    vertical-align: top;
+    font-size: x-large;
+}
+
+#question {
+    display: none;
+}
