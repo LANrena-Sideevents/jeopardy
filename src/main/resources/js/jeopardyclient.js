@@ -1,6 +1,4 @@
-const updateState = function (newState) {
-    document.getElementById('message').innerText = newState
-};
+let Jeopardy = {};
 
 const handleGameAction = function(message, client) {
     switch (message['type'])
@@ -33,7 +31,6 @@ const handleGameAction = function(message, client) {
 };
 
 document.addEventListener("DOMContentLoaded", function() {
-    let Jeopardy = {};
     let TOPIC_PREFIX = '/topic';
 
     window.stomp = Stomp.over(new SockJS('http://' + window.location.host + '/jeopardy'));
@@ -42,98 +39,31 @@ document.addEventListener("DOMContentLoaded", function() {
         return v.toString(16);
     });
 
-    Jeopardy.Game = Backbone.Model.extend({
-        defaults: {
-            id: "",
-            Name: "",
-            Color: ""
-        },
-    });
+    Jeopardy.Message = ko.observable();
 
-    Jeopardy.Games = Backbone.Collection.extend({
-        model: Jeopardy.Game,
-    });
+    Jeopardy.Game = function (id, name, color) {
+        let self = this;
+        this.id = ko.observable(id);
+        this.name = ko.observable(name);
+        this.color = ko.observable(color);
 
-    let games = new Jeopardy.Games();
-    window.games = games;
+        this.selectGame = function(){
+        }
+    };
 
-    Jeopardy.GameList = Backbone.View.extend({
-        id: 'GameList',
-        initialize: function(games) {
-            _.bindAll(this, 'render', 'addGame');
-
-            this.games = games;
-            this.games.bind('reset', this.render);
-            this.games.bind('add', this.addGame);
-            this.render();
-        },
-
-        render: function() {
-            const self = this;
-            this.games.each(function(game) {
-                self.addGame(game);
-            });
-
-            return this;
-        },
-
-        addGame: function(game) {
-            const tdv = new Jeopardy.GameListItem(game);
-            $(this.el).append(tdv.el);
-        },
-    });
-
-    Jeopardy.GameListItem = Backbone.View.extend({
-        className: 'game',
-        events: {
-            'click': 'selectGame',
-        },
-        initialize: function(model) {
-            _.bindAll(this, 'selectGame');
-            this.model = model;
-            this.render();
-        },
-
-        render: function() {
-            $(this.el).html('<li id="' + this.model.id + '">' + this.model.id + '</li>');
-            $(this.el).attr('id', this.model.id);
-            return this;
-        },
-
-        selectGame: function() {
-            window.stomp.unsubscribe(TOPIC_PREFIX + '/games');
-            window.stomp.subscribe(TOPIC_PREFIX + '/game/' + this.model.id, function (message) {
-                //handleGameAction(JSON.parse(message.body), stompClient);
-            });
-            document.getElementById('waitingroom').style.display = "none";
-            document.getElementById('gameboard').style.display = "table";
-        },
-    });
+    Jeopardy.Games = ko.observableArray();
 
     window.stomp.connect({}, function () {
-        Jeopardy.App = Backbone.Router.extend({
-            routes: {
-                '': 'index',
-                '/': 'index',
-                '#game': 'game',
-            },
-
-            index: function() {
-                $('#gamelist').append(new Jeopardy.GameList(games).el);
-            },
-        });
+        ko.applyBindings(Jeopardy);
 
         window.stomp.subscribe(TOPIC_PREFIX + '/games', function (game_result) {
             for (let game of JSON.parse(game_result.body)['payload']) {
-                games.add(new Jeopardy.Game(game));
+                Jeopardy.Games.push(new Jeopardy.Game(game.id, null, null));
             }
         });
 
-        updateState("Connected");
-
-        window.app = new Jeopardy.App();
-        Backbone.history.start();
+        Jeopardy.Message("Connected");
     });
 
-    updateState("Contacting server...");
+    Jeopardy.Message("Contacting server...");
 });
