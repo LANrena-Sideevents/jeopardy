@@ -34,7 +34,15 @@
         <td id="row1col4">100</td>
         <td id="row1col5">100</td>
         <td id="scoreboard" rowspan="5">
-            <ul id="players">
+            <ul id="players" data-bind="foreach: SelectedGame().Players">
+                <li>
+                    <!-- ko text: name -->
+                    <!-- /ko -->
+                    <span class="score">
+                        <!-- ko text: points -->
+                        <!-- /ko -->
+                    </span>
+                </li>
             </ul>
         </td>
     </tr>

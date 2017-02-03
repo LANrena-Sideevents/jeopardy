@@ -9,17 +9,12 @@ const handleGameAction = function(message, client) {
             break;
 
         case "AddPlayerEvent":
-            let player = message['payload'];
-            let node = document.createElement("li");
-            node.innerText = player['name'];
-
-            let score = document.createElement("span");
-            score.className += 'score';
-            score.innerText = player['points'];
-            node.appendChild(score);
-
-            let players = document.getElementById('players');
-            players.appendChild(node);
+            Jeopardy.SelectedGame().Players.push(
+                new Jeopardy.Player(
+                    message['payload'].id,
+                    message['payload'].name,
+                    message['payload'].color,
+                    message['payload'].points));
             break;
 
         case "RemoveFieldEvent":
@@ -41,15 +36,25 @@ document.addEventListener("DOMContentLoaded", function() {
 
     Jeopardy.Message = ko.observable();
 
-    Jeopardy.Game = function (id, name, color) {
+    Jeopardy.Game = function (id) {
         this.id = ko.observable(id);
-        this.name = ko.observable(name);
-        this.color = ko.observable(color);
+        this.Players = ko.observableArray();
 
         //noinspection JSUnusedGlobalSymbols
         this.selectGame = function() {
             Jeopardy.SelectedGame(this);
+            window.stomp.unsubscribe('/topic/games');
+            window.stomp.subscribe('/topic/game/' + this.id(), function (message) {
+                handleGameAction(JSON.parse(message.body), window.stomp);
+            });
         }
+    };
+
+    Jeopardy.Player = function(id, name, color, points) {
+        this.id = ko.observable(id);
+        this.name = ko.observable(name);
+        this.color = ko.observable(color);
+        this.points = ko.observable(points);
     };
 
     Jeopardy.Games = ko.observableArray();
@@ -60,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         window.stomp.subscribe(TOPIC_PREFIX + '/games', function (game_result) {
             for (let game of JSON.parse(game_result.body)['payload']) {
-                Jeopardy.Games.push(new Jeopardy.Game(game.id, null, null));
+                Jeopardy.Games.push(new Jeopardy.Game(game.id));
             }
         });
 

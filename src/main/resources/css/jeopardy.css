@@ -7,6 +7,11 @@
 
 #gameboard th {
     height: 1.5em;
+    width: 15%;
+}
+
+#gameboard th#scoreboard_header {
+    width: 25%;
 }
 
 #gameboard td:not(#scoreboard) {
