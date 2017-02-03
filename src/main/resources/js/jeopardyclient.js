@@ -42,16 +42,18 @@ document.addEventListener("DOMContentLoaded", function() {
     Jeopardy.Message = ko.observable();
 
     Jeopardy.Game = function (id, name, color) {
-        let self = this;
         this.id = ko.observable(id);
         this.name = ko.observable(name);
         this.color = ko.observable(color);
 
-        this.selectGame = function(){
+        //noinspection JSUnusedGlobalSymbols
+        this.selectGame = function() {
+            Jeopardy.SelectedGame(this);
         }
     };
 
     Jeopardy.Games = ko.observableArray();
+    Jeopardy.SelectedGame = ko.observable();
 
     window.stomp.connect({}, function () {
         ko.applyBindings(Jeopardy);
