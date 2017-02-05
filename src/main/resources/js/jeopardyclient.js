@@ -1,30 +1,5 @@
 let Jeopardy = {};
 
-const handleGameAction = function(message, client) {
-    switch (message['type'])
-    {
-        case "CombinedEvent":
-            for (let event of message['payload'])
-                handleGameAction(event, client);
-            break;
-
-        case "PlayerEvent":
-            Jeopardy.SelectedGame().Players.push(
-                new Jeopardy.Player(
-                    message['payload'].id,
-                    message['payload'].name,
-                    message['payload'].color,
-                    message['payload'].points));
-            break;
-
-        case "RemoveFieldEvent":
-            let field = document.getElementById(message['payload']['field']);
-            field.style.background = message['payload']['color'];
-            field.innerText = '';
-            break;
-    }
-};
-
 document.addEventListener("DOMContentLoaded", function() {
     let TOPIC_PREFIX = '/topic';
 
@@ -33,6 +8,31 @@ document.addEventListener("DOMContentLoaded", function() {
         let r = Math.random() * 16 | 0, v = c == 'x' ? r: (r & 0x3 | 0x8);
         return v.toString(16);
     });
+
+    const handleGameAction = function(message, client) {
+        switch (message['type'])
+        {
+            case "CombinedEvent":
+                for (let event of message['payload'])
+                    handleGameAction(event, client);
+                break;
+
+            case "PlayerEvent":
+                Jeopardy.SelectedGame().Players.push(
+                    new Jeopardy.Player(
+                        message['payload'].id,
+                        message['payload'].name,
+                        message['payload'].color,
+                        message['payload'].points));
+                break;
+
+            case "RemoveFieldEvent":
+                let field = document.getElementById(message['payload']['field']);
+                field.style.background = message['payload']['color'];
+                field.innerText = '';
+                break;
+        }
+    };
 
     Jeopardy.Message = ko.observable();
 
