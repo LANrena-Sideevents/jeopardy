@@ -19,7 +19,10 @@
 <div th:replace="backend/fragments/navigation :: navigation-full"></div>
 
 <div class="container">
-    <h1 th:text="${game.id}"/>
+    <ol class="breadcrumb">
+        <li><a th:href="@{|/backend|}">Jeopardy</a></li>
+        <li class="active" th:text="${game.id}"></li>
+    </ol>
 
     <form th:action="@{|/backend/game/${game.id}/load|}" method="post">
         <input type="file" name="game_data" required="required"/>

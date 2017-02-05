@@ -19,7 +19,11 @@
 <div th:replace="backend/fragments/navigation :: navigation-full"></div>
 
 <div class="container">
-    <h1 th:text="${game.id}"/>
+    <ol class="breadcrumb">
+        <li><a th:href="@{|/backend|}">Jeopardy</a></li>
+        <li><a th:href="@{|/backend/game/${game.id}|}" th:text="${game.id}"></a></li>
+        <li class="active">Players</li>
+    </ol>
 
     <ul class="list-group">
         <li class="list-group-item" th:each="player : ${game.players}">

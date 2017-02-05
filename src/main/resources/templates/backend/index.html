@@ -19,7 +19,9 @@
 <div th:replace="backend/fragments/navigation :: navigation"></div>
 
 <div class="container">
-    <h1>Games</h1>
+    <ol class="breadcrumb">
+        <li class="active">Jeopardy</li>
+    </ol>
 
     <div class="list-group">
         <a th:each="game : ${games}"
