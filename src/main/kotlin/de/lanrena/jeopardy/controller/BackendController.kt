@@ -1,6 +1,6 @@
 package de.lanrena.jeopardy.controller
 
-import de.lanrena.jeopardy.view.global.DisplayMessageEvent
+import de.lanrena.jeopardy.view.dialogevents.DisplayMessageEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.stereotype.Controller

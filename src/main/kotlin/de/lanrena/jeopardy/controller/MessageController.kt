@@ -2,10 +2,10 @@ package de.lanrena.jeopardy.controller
 
 import de.lanrena.jeopardy.model.Game
 import de.lanrena.jeopardy.view.JsonMessage
-import de.lanrena.jeopardy.view.global.CategoryEvent
-import de.lanrena.jeopardy.view.global.CombinedEvent
-import de.lanrena.jeopardy.view.global.GameListResultEvent
-import de.lanrena.jeopardy.view.scoreboard.PlayerEvent
+import de.lanrena.jeopardy.view.stickyevents.CategoryEvent
+import de.lanrena.jeopardy.view.stickyevents.CombinedEvent
+import de.lanrena.jeopardy.view.stickyevents.GameEvent
+import de.lanrena.jeopardy.view.stickyevents.PlayerEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.handler.annotation.DestinationVariable
 import org.springframework.messaging.simp.annotation.SubscribeMapping
@@ -19,7 +19,7 @@ open class MessageController(
 
     @SubscribeMapping("/topic/games")
     fun list_games(): Any {
-        return GameListResultEvent(*jeopardyController
+        return GameEvent(*jeopardyController
                 .listGames().toTypedArray())
     }
 

@@ -1,4 +1,4 @@
-package de.lanrena.jeopardy.view.global
+package de.lanrena.jeopardy.view.stickyevents
 
 import de.lanrena.jeopardy.model.Game
 import de.lanrena.jeopardy.view.JsonMessage
@@ -8,7 +8,7 @@ class SimplifiedGame(val id: UUID) {
     override fun toString(): String = "{'id':'" + this.id + "'}"
 }
 
-class GameListResultEvent(vararg listGames: Game)
+class GameEvent(vararg listGames: Game)
     : JsonMessage(
-        type = "GameListResultEvent",
+        type = "GameEvent",
         payload = listGames.map { SimplifiedGame(it.id) })

@@ -1,4 +1,4 @@
-package de.lanrena.jeopardy.view.scoreboard
+package de.lanrena.jeopardy.view.stickyevents
 
 import de.lanrena.jeopardy.model.Player
 import de.lanrena.jeopardy.view.JsonMessage

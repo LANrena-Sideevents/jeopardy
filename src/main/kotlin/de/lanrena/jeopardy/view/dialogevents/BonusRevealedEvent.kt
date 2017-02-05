@@ -1,8 +1,8 @@
-package de.lanrena.jeopardy.view.mainfield
+package de.lanrena.jeopardy.view.dialogevents
 
 import de.lanrena.jeopardy.view.JsonMessage
 
-class BonusRevealedEvent()
+class BonusRevealedEvent
     : JsonMessage(
         type = "BonusRevealedEvent",
         payload = "")

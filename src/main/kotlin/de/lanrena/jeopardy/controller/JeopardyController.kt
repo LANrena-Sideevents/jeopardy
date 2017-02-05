@@ -3,13 +3,13 @@ package de.lanrena.jeopardy.controller
 import de.lanrena.jeopardy.model.Game
 import de.lanrena.jeopardy.model.Player
 import de.lanrena.jeopardy.model.State
-import de.lanrena.jeopardy.view.global.GameListResultEvent
-import de.lanrena.jeopardy.view.scoreboard.PlayerEvent
+import de.lanrena.jeopardy.view.stickyevents.GameEvent
+import de.lanrena.jeopardy.view.stickyevents.PlayerEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import java.util.*
 
-class JeopardyController() {
+class JeopardyController {
 
     @Autowired
     private var template: SimpMessagingTemplate? = null
@@ -20,7 +20,7 @@ class JeopardyController() {
     fun createGame() {
         val element = Game()
         games.add(element)
-        template?.convertAndSend("/topic/games", GameListResultEvent(element))
+        template?.convertAndSend("/topic/games", GameEvent(element))
     }
 
     fun listGames(): List<Game> {

@@ -1,4 +1,4 @@
-package de.lanrena.jeopardy.view.global
+package de.lanrena.jeopardy.view.stickyevents
 
 import de.lanrena.jeopardy.view.JsonMessage
 
