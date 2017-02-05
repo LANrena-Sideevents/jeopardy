@@ -31,12 +31,32 @@ class JeopardyController {
         return games.filter { it.id == id }.firstOrNull()
     }
 
-    fun addPlayer(gameId : UUID, name: String, color: String) {
+    fun addPlayer(gameId: UUID, name: String, color: String) {
         val player = Player(
                 name = name,
                 color = color)
 
         findGame(gameId)?.players?.add(player)
         template?.convertAndSend("/topic/game/" + gameId, PlayerEvent(player))
+    }
+
+    fun updatePlayer(game: Game, playerId: UUID,
+                     name: String, color: String,
+                     points: Int) {
+
+        val player = Player(
+                id = playerId,
+                name = name,
+                color = color,
+                points = points)
+
+        game.players.remove(findPlayer(game, playerId))
+        game.players.add(player)
+
+        template?.convertAndSend("/topic/game/" + game.id, PlayerEvent(player))
+    }
+
+    fun findPlayer(game: Game, playerId: UUID): Player? {
+        return game.players.filter { it.id == playerId }.firstOrNull()
     }
 }
