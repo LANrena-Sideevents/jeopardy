@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 break;
 
             case "CategoryEvent":
-                let colProperty = 'col' + message['payload'].column;
+                let colProperty = 'col' + message['payload']['column'];
                 Jeopardy.SelectedGame().Categories[colProperty](message['payload'].label);
                 break;
 
@@ -40,11 +40,11 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     const updateFunc = function (item) {
-        if (this.id != item.id) {
+        if (this.id() != item.id()) {
             return false;
         }
 
-        for (let property of item) {
+        for (let property of Object.keys(item)) {
             if (!item.hasOwnProperty(property)) {
                 continue;
             }
@@ -57,11 +57,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 continue;
             }
 
-            if (item[property] instanceof ko.observable) {
+            if (ko.isObservable(item[property])) {
                 if (!this.hasOwnProperty(property)) {
                     this[property] = item[property];
                 } else {
-                    this[property](item[property]);
+                    this[property](item[property]());
                 }
             }
         }
@@ -71,7 +71,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const addIfNotExists = function (list, item) {
         let wasUpdated = false;
-        ko.utils.arrayForEach(list, (listItem) => {
+        ko.utils.arrayForEach(list(), (listItem) => {
+            console.log(listItem);
             wasUpdated |= listItem.update(item);
         });
 
