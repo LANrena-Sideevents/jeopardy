@@ -8,7 +8,7 @@ const handleGameAction = function(message, client) {
                 handleGameAction(event, client);
             break;
 
-        case "AddPlayerEvent":
+        case "PlayerEvent":
             Jeopardy.SelectedGame().Players.push(
                 new Jeopardy.Player(
                     message['payload'].id,

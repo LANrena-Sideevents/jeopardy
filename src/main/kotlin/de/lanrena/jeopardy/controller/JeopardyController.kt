@@ -4,7 +4,7 @@ import de.lanrena.jeopardy.model.Game
 import de.lanrena.jeopardy.model.Player
 import de.lanrena.jeopardy.model.State
 import de.lanrena.jeopardy.view.global.GameListResultEvent
-import de.lanrena.jeopardy.view.scoreboard.AddPlayerEvent
+import de.lanrena.jeopardy.view.scoreboard.PlayerEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import java.util.*
@@ -37,6 +37,6 @@ class JeopardyController() {
                 color = color)
 
         findGame(gameId)?.players?.add(player)
-        template?.convertAndSend("/topic/game/" + gameId, AddPlayerEvent(player))
+        template?.convertAndSend("/topic/game/" + gameId, PlayerEvent(player))
     }
 }

@@ -3,7 +3,7 @@ package de.lanrena.jeopardy.view.scoreboard
 import de.lanrena.jeopardy.model.Player
 import de.lanrena.jeopardy.view.JsonMessage
 
-class AddPlayerEvent(player: Player)
+class PlayerEvent(player: Player)
     : JsonMessage(
-        type = "AddPlayerEvent",
+        type = "PlayerEvent",
         payload = player)
