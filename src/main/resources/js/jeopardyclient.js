@@ -26,7 +26,12 @@ document.addEventListener("DOMContentLoaded", function () {
                         message['payload'].points));
                 break;
 
-            case "RemoveFieldEvent":
+            case "CategoryEvent":
+                let colProperty = 'col' + message['payload'].column;
+                Jeopardy.SelectedGame().Categories[colProperty](message['payload'].label);
+                break;
+
+            case "FieldEvent":
                 let field = document.getElementById(message['payload']['field']);
                 field.style.background = message['payload']['color'];
                 field.innerText = '';
@@ -80,6 +85,14 @@ document.addEventListener("DOMContentLoaded", function () {
     Jeopardy.Game = function (id) {
         this.id = ko.observable(id);
         this.Players = ko.observableArray();
+
+        this.Categories = {
+            col1: ko.observable("Category 1"),
+            col2: ko.observable("Category 2"),
+            col3: ko.observable("Category 3"),
+            col4: ko.observable("Category 4"),
+            col5: ko.observable("Category 5")
+        };
 
         //noinspection JSUnusedGlobalSymbols
         this.selectGame = function () {

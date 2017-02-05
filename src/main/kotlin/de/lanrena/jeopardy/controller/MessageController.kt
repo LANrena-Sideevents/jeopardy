@@ -2,6 +2,7 @@ package de.lanrena.jeopardy.controller
 
 import de.lanrena.jeopardy.model.Game
 import de.lanrena.jeopardy.view.JsonMessage
+import de.lanrena.jeopardy.view.global.CategoryEvent
 import de.lanrena.jeopardy.view.global.CombinedEvent
 import de.lanrena.jeopardy.view.global.GameListResultEvent
 import de.lanrena.jeopardy.view.scoreboard.PlayerEvent
@@ -28,6 +29,7 @@ open class MessageController(
 
         val initialData: MutableList<JsonMessage> = mutableListOf()
         initialData.addAll(game.players.map(::PlayerEvent))
+        initialData.addAll(game.categories.map(::CategoryEvent))
 
         return CombinedEvent(initialData)
     }
