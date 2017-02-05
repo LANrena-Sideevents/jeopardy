@@ -1,14 +1,31 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script src="/webjars/jquery/3.1.1-1/jquery.min.js" defer="defer"></script>
+    <script src="/webjars/tether/1.4.0/js/tether.min.js" defer="defer"></script>
+    <script src="/webjars/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" defer="defer"></script>
+
+    <link rel="stylesheet" href="/webjars/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css"/>
+</head>
 <body>
-<h1>Games</h1>
-<form action="/backend/game" method="post">
-    <input type="submit" value="Create Game"/>
-</form>
-<ul>
-    <li th:each="game : ${games}">
-        <a th:text="${game.id}" th:href="@{|/backend/game/${game.id}|}"/>
-    </li>
-</ul>
+
+<nav class="navbar-inverse bg-inverse navbar-fixed-top">
+    <a class="navbar-brand" href="/backend">Jeopardy</a>
+</nav>
+
+<div class="container">
+    <h1>Games</h1>
+
+    <div class="list-group">
+        <a th:each="game : ${games}"
+           class="list-group-item list-group-item-action"
+           th:text="${game.id}"
+           th:href="@{|/backend/game/${game.id}|}"/>
+    </div>
+
+    <form action="/backend/game" method="post">
+        <input type="submit" value="Create Game"/>
+    </form>
+</div>
 </body>
 </html>
