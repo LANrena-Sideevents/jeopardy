@@ -6,6 +6,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 import java.util.*
 
 @Controller
@@ -29,6 +30,13 @@ open class BackendController(
         val findGame = gameState.findGame(gameId!!) ?: return "redirect:/backend/index"
         model.addAttribute("game", findGame)
         return "backend/game"
+    }
+
+    @PostMapping("/game/{gameid}/load")
+    fun load_data(@PathVariable("gameid") gameId: UUID,
+                  @RequestParam("game_data") gameData: MultipartFile): String {
+        gameState.loadGameData(gameId, gameData)
+        return "redirect:/backend/game/$gameId"
     }
 
     @GetMapping("/game/{gameid}/player/{playerid}")

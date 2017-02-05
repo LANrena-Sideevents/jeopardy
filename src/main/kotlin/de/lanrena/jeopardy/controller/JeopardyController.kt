@@ -7,6 +7,8 @@ import de.lanrena.jeopardy.view.stickyevents.GameEvent
 import de.lanrena.jeopardy.view.stickyevents.PlayerEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.simp.SimpMessagingTemplate
+import org.springframework.web.multipart.MultipartFile
+import java.io.File
 import java.util.*
 
 class JeopardyController {
@@ -58,5 +60,13 @@ class JeopardyController {
 
     fun findPlayer(game: Game, playerId: UUID): Player? {
         return game.players.filter { it.id == playerId }.firstOrNull()
+    }
+
+    fun loadGameData(gameId: UUID, gameData: MultipartFile) {
+        val tempFile = File.createTempFile(gameId.toString(), null)
+        gameData.transferTo(tempFile)
+        tempFile.deleteOnExit()
+
+
     }
 }
