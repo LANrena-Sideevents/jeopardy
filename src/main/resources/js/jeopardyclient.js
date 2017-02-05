@@ -1,30 +1,29 @@
 let Jeopardy = {};
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     let TOPIC_PREFIX = '/topic';
 
     let appAddr = window.location.host || "[::1]:8080";
     window.stomp = Stomp.over(new SockJS('http://' + appAddr + '/jeopardy'));
-    window.stomp.clientId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        let r = Math.random() * 16 | 0, v = c == 'x' ? r: (r & 0x3 | 0x8);
+    window.stomp.clientId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        let r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
 
-    const handleGameAction = function(message, client) {
-        switch (message['type'])
-        {
+    const handleGameAction = function (message, client) {
+        switch (message['type']) {
             case "CombinedEvent":
                 for (let event of message['payload'])
                     handleGameAction(event, client);
                 break;
 
             case "PlayerEvent":
-                let player = new Jeopardy.Player(
-                    message['payload'].id,
-                    message['payload'].name,
-                    message['payload'].color,
-                    message['payload'].points);
-                addIfNotExists(Jeopardy.SelectedGame().Players, player);
+                Jeopardy.SelectedGame().addPlayer(
+                    new Jeopardy.Player(
+                        message['payload'].id,
+                        message['payload'].name,
+                        message['payload'].color,
+                        message['payload'].points));
                 break;
 
             case "RemoveFieldEvent":
@@ -83,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function() {
         this.Players = ko.observableArray();
 
         //noinspection JSUnusedGlobalSymbols
-        this.selectGame = function() {
+        this.selectGame = function () {
             Jeopardy.SelectedGame(this);
             window.stomp.unsubscribe('/topic/games');
             window.stomp.subscribe('/topic/game/' + this.id(), function (message) {
@@ -92,9 +91,12 @@ document.addEventListener("DOMContentLoaded", function() {
         };
 
         this.update = updateFunc;
+        this.addPlayer = (player) => {
+            addIfNotExists(this.Players, player)
+        };
     };
 
-    Jeopardy.Player = function(id, name, color, points) {
+    Jeopardy.Player = function (id, name, color, points) {
         this.id = ko.observable(id);
         this.name = ko.observable(name);
         this.color = ko.observable(color);
