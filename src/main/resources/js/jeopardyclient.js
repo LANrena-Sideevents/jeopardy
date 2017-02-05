@@ -18,12 +18,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 break;
 
             case "PlayerEvent":
-                Jeopardy.SelectedGame().Players.push(
-                    new Jeopardy.Player(
-                        message['payload'].id,
-                        message['payload'].name,
-                        message['payload'].color,
-                        message['payload'].points));
+                let player = new Jeopardy.Player(
+                    message['payload'].id,
+                    message['payload'].name,
+                    message['payload'].color,
+                    message['payload'].points);
+                addIfNotExists(Jeopardy.SelectedGame().Players, player);
                 break;
 
             case "RemoveFieldEvent":
@@ -31,6 +31,47 @@ document.addEventListener("DOMContentLoaded", function() {
                 field.style.background = message['payload']['color'];
                 field.innerText = '';
                 break;
+        }
+    };
+
+    const updateFunc = function (item) {
+        if (this.id != item.id) {
+            return false;
+        }
+
+        for (let property of item) {
+            if (!item.hasOwnProperty(property)) {
+                continue;
+            }
+
+            if (item[property] instanceof ko.observableArray) {
+                this[property] = this[property] || ko.observableArray();
+                ko.utils.arrayForEach(item[property], (otherItem) => {
+                    addIfNotExists(this[property], otherItem);
+                });
+                continue;
+            }
+
+            if (item[property] instanceof ko.observable) {
+                if (!this.hasOwnProperty(property)) {
+                    this[property] = item[property];
+                } else {
+                    this[property](item[property]);
+                }
+            }
+        }
+
+        return true;
+    };
+
+    const addIfNotExists = function (list, item) {
+        let wasUpdated = false;
+        ko.utils.arrayForEach(list, (listItem) => {
+            wasUpdated |= listItem.update(item);
+        });
+
+        if (!wasUpdated) {
+            list.push(item);
         }
     };
 
@@ -47,7 +88,9 @@ document.addEventListener("DOMContentLoaded", function() {
             window.stomp.subscribe('/topic/game/' + this.id(), function (message) {
                 handleGameAction(JSON.parse(message.body), window.stomp);
             });
-        }
+        };
+
+        this.update = updateFunc;
     };
 
     Jeopardy.Player = function(id, name, color, points) {
@@ -55,6 +98,8 @@ document.addEventListener("DOMContentLoaded", function() {
         this.name = ko.observable(name);
         this.color = ko.observable(color);
         this.points = ko.observable(points);
+
+        this.update = updateFunc;
     };
 
     Jeopardy.Games = ko.observableArray();
@@ -65,7 +110,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
         window.stomp.subscribe(TOPIC_PREFIX + '/games', function (game_result) {
             for (let game of JSON.parse(game_result.body)['payload']) {
-                Jeopardy.Games.push(new Jeopardy.Game(game.id));
+                let item = new Jeopardy.Game(game.id);
+                addIfNotExists(Jeopardy.Games, item);
             }
         });
 
