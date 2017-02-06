@@ -31,13 +31,9 @@ class JeopardyController {
 
     fun findGame(id: UUID): Game? = games.filter { it.id == id }.firstOrNull()
 
-    fun addPlayer(gameId: UUID, name: String, color: String) {
-        val player = Player(
-                name = name,
-                color = color)
-
+    fun addPlayer(gameId: UUID, name: String) {
+        val player = Player(name = name)
         findGame(gameId)?.players?.add(player)
-
         template?.convertAndSend("/topic/game/$gameId", PlayerEvent(player))
     }
 

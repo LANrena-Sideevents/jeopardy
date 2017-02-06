@@ -73,9 +73,8 @@ open class BackendController(
 
     @PostMapping("/game/{gameid}/players")
     fun add_player(@PathVariable("gameid") gameId: UUID,
-                   @RequestParam("player_name") player_name: String,
-                   @RequestParam("player_color") player_color: String): String {
-        gameState.addPlayer(gameId, player_name, player_color)
+                   @RequestParam("player_name") player_name: String): String {
+        gameState.addPlayer(gameId, player_name)
         return "redirect:/backend/game/$gameId/players"
     }
 
