@@ -50,7 +50,7 @@ class JeopardyController {
         game.players.remove(findPlayer(game, playerId))
         game.players.add(player)
 
-        template?.convertAndSend("/topic/game/$game.id", PlayerEvent(player))
+        template?.convertAndSend("/topic/game/" + game.id, PlayerEvent(player))
     }
 
     fun findPlayer(game: Game, playerId: UUID): Player? =
