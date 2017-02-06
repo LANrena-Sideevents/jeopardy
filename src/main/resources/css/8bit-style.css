@@ -79,6 +79,7 @@ body {
 
 #scoreboard li {
     list-style: none;
+    margin: 0 0 1em 0;
 }
 
 span.score {
@@ -86,4 +87,14 @@ span.score {
     font-style: italic;
     font-size: large;
     float: right;
+}
+
+svg {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+}
+
+svg rect {
+    fill-opacity: 1;
 }
