@@ -27,9 +27,10 @@ open class BackendController(
 
     @GetMapping("/game/{gameid}")
     fun game(@PathVariable("gameid") gameId: UUID?, model: Model): String {
-        val findGame = gameState.findGame(gameId!!) ?: return "redirect:/backend/index"
-        model.addAttribute("game", findGame)
-        return "backend/game"
+        val game = gameState.findGame(gameId!!) ?: return "redirect:/backend/index"
+        model.addAttribute("game", game)
+
+        return if (game.dataLoaded) "backend/game" else "backend/init_game"
     }
 
     @PostMapping("/game/{gameid}/load")

@@ -3,7 +3,6 @@ package de.lanrena.jeopardy.controller
 import de.lanrena.jeopardy.io.GameDataReader
 import de.lanrena.jeopardy.model.Game
 import de.lanrena.jeopardy.model.Player
-import de.lanrena.jeopardy.model.State
 import de.lanrena.jeopardy.view.stickyevents.CategoryEvent
 import de.lanrena.jeopardy.view.stickyevents.CombinedEvent
 import de.lanrena.jeopardy.view.stickyevents.GameEvent
@@ -28,7 +27,7 @@ class JeopardyController {
         template?.convertAndSend("/topic/games", GameEvent(element))
     }
 
-    fun listGames(): List<Game> = games.filter { it.state != State.Finished }
+    fun listGames(): List<Game> = games.filter { !it.finished }
 
     fun findGame(id: UUID): Game? = games.filter { it.id == id }.firstOrNull()
 
@@ -58,9 +57,8 @@ class JeopardyController {
         template?.convertAndSend("/topic/game/$game.id", PlayerEvent(player))
     }
 
-    fun findPlayer(game: Game, playerId: UUID): Player? {
-        return game.players.filter { it.id == playerId }.firstOrNull()
-    }
+    fun findPlayer(game: Game, playerId: UUID): Player? =
+            game.players.filter { it.id == playerId }.firstOrNull()
 
     fun loadGameData(gameId: UUID, gameDataFile: MultipartFile) {
         val tempFile = File.createTempFile(gameId.toString(), null)
@@ -69,8 +67,9 @@ class JeopardyController {
 
         val gameDataReader: GameDataReader = GameDataReader(tempFile)
 
-        val game: Game? = findGame(gameId)
-        game?.categories!!.addAll(gameDataReader.categories)
+        val game: Game = findGame(gameId) ?: return
+        game.categories.addAll(gameDataReader.categories)
+        game.dataLoaded = true
 
         template?.convertAndSend("/topic/game/$gameId", getCombinedState(gameId))
     }

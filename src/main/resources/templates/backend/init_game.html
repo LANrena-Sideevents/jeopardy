@@ -24,7 +24,10 @@
         <li class="active" th:text="${game.id}"></li>
     </ol>
 
-    game loaded. a playfield should appear here soon...
+    <form th:action="@{|/backend/game/${game.id}/load|}" enctype="multipart/form-data" method="post">
+        <input type="file" name="game_data" required="required"/>
+        <input type="submit" value="Load Data"/>
+    </form>
 </div>
 
 </body>
