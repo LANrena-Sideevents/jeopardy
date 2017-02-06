@@ -72,7 +72,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const addIfNotExists = function (list, item) {
         let wasUpdated = false;
         ko.utils.arrayForEach(list(), (listItem) => {
-            console.log(listItem);
             wasUpdated |= listItem.update(item);
         });
 

@@ -1,8 +1,11 @@
 package de.lanrena.jeopardy.controller
 
+import de.lanrena.jeopardy.io.GameDataReader
 import de.lanrena.jeopardy.model.Game
 import de.lanrena.jeopardy.model.Player
 import de.lanrena.jeopardy.model.State
+import de.lanrena.jeopardy.view.stickyevents.CategoryEvent
+import de.lanrena.jeopardy.view.stickyevents.CombinedEvent
 import de.lanrena.jeopardy.view.stickyevents.GameEvent
 import de.lanrena.jeopardy.view.stickyevents.PlayerEvent
 import org.springframework.beans.factory.annotation.Autowired
@@ -25,13 +28,9 @@ class JeopardyController {
         template?.convertAndSend("/topic/games", GameEvent(element))
     }
 
-    fun listGames(): List<Game> {
-        return games.filter { it.state != State.Finished }
-    }
+    fun listGames(): List<Game> = games.filter { it.state != State.Finished }
 
-    fun findGame(id: UUID): Game? {
-        return games.filter { it.id == id }.firstOrNull()
-    }
+    fun findGame(id: UUID): Game? = games.filter { it.id == id }.firstOrNull()
 
     fun addPlayer(gameId: UUID, name: String, color: String) {
         val player = Player(
@@ -39,7 +38,8 @@ class JeopardyController {
                 color = color)
 
         findGame(gameId)?.players?.add(player)
-        template?.convertAndSend("/topic/game/" + gameId, PlayerEvent(player))
+
+        template?.convertAndSend("/topic/game/$gameId", PlayerEvent(player))
     }
 
     fun updatePlayer(game: Game, playerId: UUID,
@@ -55,18 +55,31 @@ class JeopardyController {
         game.players.remove(findPlayer(game, playerId))
         game.players.add(player)
 
-        template?.convertAndSend("/topic/game/" + game.id, PlayerEvent(player))
+        template?.convertAndSend("/topic/game/$game.id", PlayerEvent(player))
     }
 
     fun findPlayer(game: Game, playerId: UUID): Player? {
         return game.players.filter { it.id == playerId }.firstOrNull()
     }
 
-    fun loadGameData(gameId: UUID, gameData: MultipartFile) {
+    fun loadGameData(gameId: UUID, gameDataFile: MultipartFile) {
         val tempFile = File.createTempFile(gameId.toString(), null)
-        gameData.transferTo(tempFile)
+        gameDataFile.transferTo(tempFile)
         tempFile.deleteOnExit()
 
+        val gameDataReader: GameDataReader = GameDataReader(tempFile)
 
+        val game: Game? = findGame(gameId)
+        game?.categories!!.addAll(gameDataReader.categories)
+
+        template?.convertAndSend("/topic/game/$gameId", getCombinedState(gameId))
+    }
+
+    fun getCombinedState(gameId: UUID): CombinedEvent? {
+        val game: Game = findGame(gameId) ?: return null
+        val initialData: MutableList<de.lanrena.jeopardy.view.JsonMessage> = mutableListOf()
+        initialData.addAll(game.players.map(::PlayerEvent))
+        initialData.addAll(game.categories.map(::CategoryEvent))
+        return CombinedEvent(initialData)
     }
 }

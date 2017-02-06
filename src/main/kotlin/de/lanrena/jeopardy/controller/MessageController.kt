@@ -1,11 +1,6 @@
 package de.lanrena.jeopardy.controller
 
-import de.lanrena.jeopardy.model.Game
-import de.lanrena.jeopardy.view.JsonMessage
-import de.lanrena.jeopardy.view.stickyevents.CategoryEvent
-import de.lanrena.jeopardy.view.stickyevents.CombinedEvent
 import de.lanrena.jeopardy.view.stickyevents.GameEvent
-import de.lanrena.jeopardy.view.stickyevents.PlayerEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.handler.annotation.DestinationVariable
 import org.springframework.messaging.simp.annotation.SubscribeMapping
@@ -14,23 +9,12 @@ import java.util.*
 
 @Controller
 @Suppress("unused")
-open class MessageController(
-        @Autowired val jeopardyController: JeopardyController) {
+open class MessageController(@Autowired val jeopardyController: JeopardyController) {
 
     @SubscribeMapping("/topic/games")
-    fun list_games(): Any {
-        return GameEvent(*jeopardyController
-                .listGames().toTypedArray())
-    }
+    fun list_games(): Any = GameEvent(*jeopardyController.listGames().toTypedArray())
 
     @SubscribeMapping("/topic/game/{gameid}")
-    fun subscribe_game(@DestinationVariable("gameid") gameId: UUID): Any? {
-        val game: Game = jeopardyController.findGame(gameId) ?: return null
-
-        val initialData: MutableList<JsonMessage> = mutableListOf()
-        initialData.addAll(game.players.map(::PlayerEvent))
-        initialData.addAll(game.categories.map(::CategoryEvent))
-
-        return CombinedEvent(initialData)
-    }
+    fun subscribe_game(@DestinationVariable("gameid") gameId: UUID): Any? =
+            jeopardyController.getCombinedState(gameId)
 }
