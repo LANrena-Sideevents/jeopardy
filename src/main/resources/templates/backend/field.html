@@ -36,9 +36,9 @@
     </div>
 
     <img th:src="${#strings.substring(field.question,6)}"
-         th:if="${#strings.substring(field.question,0,6) == 'image:'}"/>
+         th:if="${#strings.startsWith(field.question, 'image:')}"/>
     <div th:text="${field.question}"
-         th:if="${#strings.substring(field.question,0,6) != 'image:'}"/>
+         th:unless="${#strings.startsWith(field.question, 'image:')}"/>
     <div class="well well-sm" th:text="${field.answer}"/>
 </div>
 </body>
