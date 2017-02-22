@@ -27,9 +27,8 @@ open class BackendController(
 
     @GetMapping("/game/{gameid}")
     fun game(@PathVariable("gameid") gameId: UUID?, model: Model): String {
-        val game = gameState.findGame(gameId!!) ?: return "redirect:/backend/index"
+        val game = gameState.findGame(gameId) ?: return "redirect:/backend/index"
         model.addAttribute("game", game)
-
         return if (game.dataLoaded) "backend/game" else "backend/init_game"
     }
 
@@ -46,12 +45,9 @@ open class BackendController(
             @PathVariable("playerid") playerId: UUID?,
             model: Model): String {
 
-        val game = gameState.findGame(gameId!!) ?: return "redirect:/backend/index"
+        val game = gameState.findGame(gameId) ?: return "redirect:/backend/index"
         model.addAttribute("game", game)
-
-        val player = gameState.findPlayer(game, playerId!!) ?: return "redirect:/backend/game/$gameId"
-        model.addAttribute("player", player)
-
+        model.addAttribute("player", gameState.findPlayer(game, playerId) ?: return "redirect:/backend/game/$gameId")
         return "backend/editplayer"
     }
 
@@ -64,9 +60,8 @@ open class BackendController(
             @RequestParam("player_points") player_points: String,
             model: Model): String {
 
-        val game = gameState.findGame(gameId!!) ?: return "redirect:/backend/index"
-        gameState.updatePlayer(game, playerId!!, player_name, player_color, player_points.toInt())
-
+        val game = gameState.findGame(gameId) ?: return "redirect:/backend/index"
+        gameState.updatePlayer(game, playerId, player_name, player_color, player_points.toInt())
         model.addAttribute("game", game)
         return "redirect:/backend/game/$gameId/players"
     }
@@ -74,14 +69,14 @@ open class BackendController(
     @PostMapping("/game/{gameid}/players")
     fun add_player(@PathVariable("gameid") gameId: UUID,
                    @RequestParam("player_name") player_name: String): String {
+
         gameState.addPlayer(gameId, player_name)
         return "redirect:/backend/game/$gameId/players"
     }
 
     @GetMapping("/game/{gameid}/players")
     fun list_players(@PathVariable("gameid") gameId: UUID?, model: Model): String {
-        val findGame = gameState.findGame(gameId!!) ?: return "redirect:/backend/index"
-        model.addAttribute("game", findGame)
+        model.addAttribute("game", gameState.findGame(gameId) ?: return "redirect:/backend/index")
         return "backend/players"
     }
 

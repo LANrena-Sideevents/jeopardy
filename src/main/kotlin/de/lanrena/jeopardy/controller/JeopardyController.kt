@@ -1,6 +1,7 @@
 package de.lanrena.jeopardy.controller
 
 import de.lanrena.jeopardy.io.GameDataReader
+import de.lanrena.jeopardy.model.Field
 import de.lanrena.jeopardy.model.Game
 import de.lanrena.jeopardy.model.Player
 import de.lanrena.jeopardy.view.stickyevents.CategoryEvent
@@ -29,7 +30,7 @@ class JeopardyController {
 
     fun listGames(): List<Game> = games.filter { !it.finished }
 
-    fun findGame(id: UUID): Game? = games.filter { it.id == id }.firstOrNull()
+    fun findGame(id: UUID?): Game? = games.filter { it.id == id }.firstOrNull()
 
     fun addPlayer(gameId: UUID, name: String) {
         val player = Player(name = name)
@@ -37,10 +38,10 @@ class JeopardyController {
         template?.convertAndSend("/topic/game/$gameId", PlayerEvent(player))
     }
 
-    fun updatePlayer(game: Game, playerId: UUID,
+    fun updatePlayer(game: Game, playerId: UUID?,
                      name: String, color: String,
                      points: Int) {
-
+        if (playerId == null) return
         val player = Player(
                 id = playerId,
                 name = name,
@@ -53,7 +54,7 @@ class JeopardyController {
         template?.convertAndSend("/topic/game/" + game.id, PlayerEvent(player))
     }
 
-    fun findPlayer(game: Game, playerId: UUID): Player? =
+    fun findPlayer(game: Game, playerId: UUID?): Player? =
             game.players.filter { it.id == playerId }.firstOrNull()
 
     fun loadGameData(gameId: UUID, gameDataFile: MultipartFile) {
