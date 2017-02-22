@@ -80,6 +80,19 @@ open class BackendController(
         return "backend/players"
     }
 
+    @GetMapping("/game/{gameid}/field/{col}/{row}")
+    fun display_field(
+            @PathVariable("gameid") gameId: UUID?,
+            @PathVariable("col") col: Int?,
+            @PathVariable("row") row: Int?,
+            model: Model): String {
+
+        val game = gameState.findGame(gameId) ?: return "redirect:/backend/index"
+        model.addAttribute("game", game)
+        model.addAttribute("field", gameState.getField(game, col, row))
+        return "backend/field"
+    }
+
     @PostMapping("game")
     fun create_game(): String {
         gameState.createGame()

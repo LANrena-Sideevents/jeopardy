@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script src="http://cdn.jsdelivr.net/webjars/jquery/3.1.1-1/jquery.min.js"
+            th:src="@{/webjars/jquery/3.1.1-1/jquery.min.js}"></script>
+    <script src="http://cdn.jsdelivr.net/webjars/tether/1.4.0/js/tether.min.js"
+            th:src="@{/webjars/tether/1.4.0/js/tether.min.js}"></script>
+    <script src="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"
+            th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}" defer="defer"></script>
+
+    <link rel="stylesheet"
+          src="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css"
+          th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}"/>
+
+    <link rel="stylesheet" href="/css/backend.css"/>
+</head>
+<body>
+
+<div th:replace="backend/fragments/navigation :: navigation"></div>
+
+<div class="container">
+    <ol class="breadcrumb">
+        <li><a th:href="@{|/backend|}">Jeopardy</a></li>
+        <li><a th:href="@{|/backend/game/${game.id}|}" th:text="${game.id}"></a></li>
+        <li class="active" th:text="@{|Field ${field.col},${field.row}|}"/>
+    </ol>
+
+    <div class="alert alert-danger" role="alert" th:if="${field.bonus}"/>
+
+    <div class="btn-group" role="group" aria-label="...">
+        <a type="button" class="btn btn-default">None</a>
+
+        <a type="button" class="btn btn-default"
+           th:each="player : ${game.players}"
+           th:text="${player.name}"/>
+    </div>
+
+    <img th:src="${#strings.substring(field.question,6)}"
+         th:if="${#strings.substring(field.question,0,6) == 'image:'}"/>
+    <div th:text="${field.question}"
+         th:if="${#strings.substring(field.question,0,6) != 'image:'}"/>
+    <div class="well well-sm" th:text="${field.answer}"/>
+</div>
+</body>
+</html>

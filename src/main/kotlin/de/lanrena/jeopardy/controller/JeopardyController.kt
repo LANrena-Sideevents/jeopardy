@@ -79,4 +79,7 @@ class JeopardyController {
         initialData.addAll(game.categories.map(::CategoryEvent))
         return CombinedEvent(initialData)
     }
+
+    fun getField(game: Game, x: Int?, y: Int?): Field? =
+            game.fields.firstOrNull { it.col == x && it.row == y }
 }
