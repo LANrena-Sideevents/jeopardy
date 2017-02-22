@@ -65,6 +65,7 @@ class JeopardyController {
 
         val game: Game = findGame(gameId) ?: return
         game.categories.addAll(gameDataReader.categories)
+        game.fields.addAll(gameDataReader.fields)
         game.dataLoaded = true
 
         template?.convertAndSend("/topic/game/$gameId", getCombinedState(gameId))

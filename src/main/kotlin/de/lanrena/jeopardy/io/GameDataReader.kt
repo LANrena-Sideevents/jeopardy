@@ -2,7 +2,6 @@ package de.lanrena.jeopardy.io
 
 import de.lanrena.jeopardy.model.Category
 import de.lanrena.jeopardy.model.Field
-import de.lanrena.jeopardy.model.Question
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
 import org.apache.commons.compress.archivers.zip.ZipFile
 import org.json.simple.JSONArray
@@ -46,7 +45,8 @@ class GameDataReader(gameDataFile: File) {
 
                         fields.add(Field(row = rowId,
                                 col = columnId,
-                                question = Question(cell["question"] as String),
+                                question = cell["question"] as String,
+                                answer = "",
                                 bonus = false))
 
                         rowId++

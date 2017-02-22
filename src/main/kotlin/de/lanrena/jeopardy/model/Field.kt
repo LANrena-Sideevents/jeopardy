@@ -3,5 +3,6 @@ package de.lanrena.jeopardy.model
 data class Field(
         val row : Int,
         val col : Int,
-        val question : Question,
+        val question : String,
+        val answer : String,
         val bonus : Boolean)

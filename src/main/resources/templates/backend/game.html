@@ -24,7 +24,23 @@
         <li class="active" th:text="${game.id}"></li>
     </ol>
 
-    game loaded. a playfield should appear here soon...
+    <div class="panel panel-default">
+        <table class="table equal-width">
+            <thead>
+            <tr>
+                <th th:each="category : ${game.categories}">
+                    <span th:text="${ category.label }"/>
+                </th>
+            </tr>
+            </thead>
+            <tr th:each="i : ${#numbers.sequence(1, 5)}">
+                <td th:each="j : ${#numbers.sequence(1, 5)}">
+                    <a th:href="@{|/backend/game/${game.id}/field/${j}/${i}|}"
+                       th:text="${ i*100 }"/>
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
 
 </body>
