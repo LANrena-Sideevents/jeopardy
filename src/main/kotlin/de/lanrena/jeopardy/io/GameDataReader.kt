@@ -46,8 +46,8 @@ class GameDataReader(gameDataFile: File) {
                         fields.add(Field(row = rowId,
                                 col = columnId,
                                 question = cell["question"] as String,
-                                answer = "",
-                                bonus = false))
+                                answer = cell["answer"] as String,
+                                bonus = cell["daily"] != null))
 
                         rowId++
                     }
