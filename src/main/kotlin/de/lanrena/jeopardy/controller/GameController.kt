@@ -6,19 +6,18 @@ import de.lanrena.jeopardy.model.Player
 import de.lanrena.jeopardy.view.stickyevents.CategoryEvent
 import de.lanrena.jeopardy.view.stickyevents.CombinedEvent
 import de.lanrena.jeopardy.view.stickyevents.PlayerEvent
-import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.web.multipart.MultipartFile
 import java.io.File
 import java.util.*
 
 class GameController(
         val game: Game,
-        val template: SimpMessagingTemplate?) {
+        val sender: TopicSender) {
 
     fun addPlayer(name: String) {
         val player = Player(name = name)
         game.players.add(player)
-        template?.convertAndSend("/topic/game/$game.id", PlayerEvent(player))
+        sender.send(PlayerEvent(player))
     }
 
     fun loadGameData(gameDataFile: MultipartFile) {
@@ -32,10 +31,10 @@ class GameController(
         game.fields.addAll(gameDataReader.fields)
         game.dataLoaded = true
 
-        template?.convertAndSend("/topic/game/$game.id", getCombinedState())
+        sender.send(getCombinedState())
     }
 
-    fun getCombinedState(): CombinedEvent? {
+    fun getCombinedState(): CombinedEvent {
         val initialData: MutableList<de.lanrena.jeopardy.view.JsonMessage> = mutableListOf()
         initialData.addAll(game.players.map(::PlayerEvent))
         initialData.addAll(game.categories.map(::CategoryEvent))
@@ -49,6 +48,6 @@ class GameController(
 
     fun getPlayerController(playerId: UUID?): PlayerController? {
         val player = game.players.filter { it.id == playerId }.firstOrNull() ?: return null
-        return PlayerController(player, game, template)
+        return PlayerController(player, game, sender)
     }
 }

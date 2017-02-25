@@ -23,6 +23,15 @@ class JeopardyController {
 
     fun getGameControlle(id: UUID?): GameController? {
         val game = games.filter { it.id == id }.firstOrNull() ?: return null
-        return GameController(game, template)
+        return GameController(game, GameTopicSender(template, game))
+    }
+}
+
+private class GameTopicSender(
+        val template: SimpMessagingTemplate?,
+        val game: Game) : TopicSender {
+
+    override fun send(message: Any) {
+        template?.convertAndSend("/topic/game/$game.id", message)
     }
 }
