@@ -9,12 +9,13 @@ import java.util.*
 
 @Controller
 @Suppress("unused")
-open class MessageController(@Autowired val jeopardyController: JeopardyController) {
+open class MessageController(
+        @Autowired val jeopardyController: JeopardyController) {
 
     @SubscribeMapping("/topic/games")
     fun list_games(): Any = GameEvent(*jeopardyController.listGames().toTypedArray())
 
     @SubscribeMapping("/topic/game/{gameid}")
     fun subscribe_game(@DestinationVariable("gameid") gameId: UUID): Any? =
-            jeopardyController.getCombinedState(gameId)
+            jeopardyController.getGameControlle(gameId)?.getCombinedState()
 }
