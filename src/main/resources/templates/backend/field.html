@@ -25,21 +25,24 @@
         <li class="active" th:text="@{|Field ${field.col},${field.row}|}"/>
     </ol>
 
-    <div class="alert alert-danger" role="alert" th:if="${field.bonus}"/>
+    <div class="col-sm-12 alert alert-danger" role="alert" th:if="${field.bonus}"/>
 
-    <div class="btn-group" role="group" aria-label="...">
-        <a type="button" class="btn btn-default">None</a>
-
-        <a type="button" class="btn btn-default"
-           th:each="player : ${game.players}"
-           th:text="${player.name}"/>
+    <div class="container col-sm-12">
+        <a type="button" class="btn btn-danger">Display</a>
+        <div class="btn-group" role="group" aria-label="...">
+            <a type="button" class="btn btn-default">None</a>
+            <a type="button" class="btn btn-default"
+               th:each="player : ${game.players}"
+               th:text="${player.name}"/>
+        </div>
     </div>
 
-    <img th:src="@{|/resource/${game.id}/${#strings.substring(field.question,6)}|}"
+    <img class="col-sm-8 col-offset-2" th:src="@{|/resource/${game.id}/${#strings.substring(field.question,6)}|}"
          th:if="${#strings.startsWith(field.question, 'image:')}"/>
     <div th:text="${field.question}"
          th:unless="${#strings.startsWith(field.question, 'image:')}"/>
-    <div class="well well-sm" th:text="${field.answer}"/>
+
+    <div class="col-sm-12 well well-sm" th:text="${field.answer}"/>
 </div>
 </body>
 </html>
