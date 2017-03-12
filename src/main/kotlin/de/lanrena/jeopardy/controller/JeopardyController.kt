@@ -21,7 +21,7 @@ class JeopardyController {
 
     fun listGames(): List<Game> = games.filter { !it.finished }
 
-    fun getGameControlle(id: UUID?): GameController? {
+    fun getGameController(id: UUID?): GameController? {
         val game = games.filter { it.id == id }.firstOrNull() ?: return null
         return GameController(game, GameTopicSender(template, game))
     }

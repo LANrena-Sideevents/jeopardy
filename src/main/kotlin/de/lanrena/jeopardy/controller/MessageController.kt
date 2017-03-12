@@ -17,5 +17,5 @@ open class MessageController(
 
     @SubscribeMapping("/topic/game/{gameid}")
     fun subscribe_game(@DestinationVariable("gameid") gameId: UUID): Any? =
-            jeopardyController.getGameControlle(gameId)?.getCombinedState()
+            jeopardyController.getGameController(gameId)?.getCombinedState()
 }
