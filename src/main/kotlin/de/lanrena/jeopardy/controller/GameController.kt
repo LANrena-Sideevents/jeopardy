@@ -8,6 +8,7 @@ import de.lanrena.jeopardy.view.stickyevents.CombinedEvent
 import de.lanrena.jeopardy.view.stickyevents.PlayerEvent
 import org.springframework.web.multipart.MultipartFile
 import java.io.File
+import java.io.InputStream
 import java.util.*
 
 class GameController(
@@ -26,9 +27,9 @@ class GameController(
         tempFile.deleteOnExit()
 
         val gameDataReader: GameDataReader = GameDataReader(tempFile)
-
         game.categories.addAll(gameDataReader.categories)
         game.fields.addAll(gameDataReader.fields)
+        game.resources.putAll(gameDataReader.resources)
         game.dataLoaded = true
 
         sender.send(getCombinedState())
@@ -50,4 +51,6 @@ class GameController(
         val player = game.players.filter { it.id == playerId }.firstOrNull() ?: return null
         return PlayerController(player, game, sender)
     }
+
+    fun resolveResource(resId: String): InputStream? = game.resources.filterKeys { it.startsWith(resId) }.entries.first().value.get()
 }

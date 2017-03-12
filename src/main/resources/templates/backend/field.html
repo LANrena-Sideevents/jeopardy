@@ -35,7 +35,7 @@
            th:text="${player.name}"/>
     </div>
 
-    <img th:src="${#strings.substring(field.question,6)}"
+    <img th:src="@{|/resource/${game.id}/${#strings.substring(field.question,6)}|}"
          th:if="${#strings.startsWith(field.question, 'image:')}"/>
     <div th:text="${field.question}"
          th:unless="${#strings.startsWith(field.question, 'image:')}"/>
