@@ -32,6 +32,6 @@ private class GameTopicSender(
         val game: Game) : TopicSender {
 
     override fun send(message: Any) {
-        template?.convertAndSend("/topic/game/$game.id", message)
+        template?.convertAndSend("/topic/game/${game.id}", message)
     }
 }
