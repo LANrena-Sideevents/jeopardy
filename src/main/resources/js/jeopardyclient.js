@@ -3,10 +3,10 @@ let Jeopardy = {};
 document.addEventListener("DOMContentLoaded", function () {
     let TOPIC_PREFIX = '/topic';
 
-    let appAddr = window.location.host || "[::1]:8080";
-    window.stomp = Stomp.over(new SockJS('http://' + appAddr + '/jeopardy'));
+    let appAdr = window.location.host || "[::1]:8080";
+    window.stomp = Stomp.over(new SockJS('http://' + appAdr + '/jeopardy'));
     window.stomp.clientId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        let r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        let r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
 
@@ -36,11 +36,30 @@ document.addEventListener("DOMContentLoaded", function () {
                 field.style.background = message['payload']['color'];
                 field.innerText = '';
                 break;
+
+            case "OverlayEvent":
+                let overlay = document.getElementById("overlay");
+                overlay.style.display = "block";
+
+                let payload = message['payload'];
+                if (payload.startsWith("image:")) {
+                    let image = payload.substr(6);
+                    payload = document.createElement("img");
+                    payload.setAttribute("src", "/resource/" + Jeopardy.SelectedGame().id() + "/" + image);
+                    overlay.appendChild(payload);
+                } else {
+                    overlay.innerHTML = payload;
+                }
+                break;
+
+            case "ClearOverlayEvent":
+                document.getElementById("overlay").style.display = "none";
+                break;
         }
     };
 
     const updateFunc = function (item) {
-        if (this.id() != item.id()) {
+        if (this.id() !== item.id()) {
             return false;
         }
 
@@ -120,6 +139,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     Jeopardy.Games = ko.observableArray();
     Jeopardy.SelectedGame = ko.observable();
+    Jeopardy.Overlay = ko.observable();
 
     window.stomp.connect({}, function () {
         ko.applyBindings(Jeopardy);

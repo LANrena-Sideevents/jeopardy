@@ -1,6 +1,8 @@
 package de.lanrena.jeopardy.controller
 
+import de.lanrena.jeopardy.view.dialogevents.ClearOverlayEvent
 import de.lanrena.jeopardy.view.dialogevents.DisplayMessageEvent
+import de.lanrena.jeopardy.view.dialogevents.OverlayEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.stereotype.Controller
@@ -29,7 +31,14 @@ open class BackendController(
     fun game(@PathVariable("gameId") gameId: UUID?, model: Model): String {
         val gameController = gameState.getGameController(gameId) ?: return "redirect:/backend/index"
         model.addAttribute("game", gameController.game)
-        return if (gameController.game.dataLoaded) "backend/game" else "backend/init_game"
+
+        return when {
+            gameController.game.dataLoaded -> {
+                gameController.sender.send(ClearOverlayEvent())
+                "backend/game"
+            }
+            else -> "backend/init_game"
+        }
     }
 
     @PostMapping("/game/{gameId}/load")
@@ -96,6 +105,7 @@ open class BackendController(
         val fieldController = gameController.getFieldController(col, row) ?: return "redirect:/backend/index"
         model.addAttribute("game", gameController.game)
         model.addAttribute("field", fieldController.field)
+        gameController.sender.send(OverlayEvent(fieldController.field))
         return "backend/field"
     }
 

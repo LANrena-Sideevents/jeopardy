@@ -42,8 +42,8 @@ class GameController(
         return CombinedEvent(initialData)
     }
 
-    fun getFieldController(x: Int?, y: Int?): FieldController? {
-        val field = game.fields.firstOrNull { it.col == x && it.row == y } ?: return null
+    fun getFieldController(col: Int?, row: Int?): FieldController? {
+        val field = game.fields.firstOrNull { it.col == col && it.row == row } ?: return null
         return FieldController(field)
     }
 
