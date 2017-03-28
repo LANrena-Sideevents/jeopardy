@@ -21,10 +21,10 @@ open class FrontendController(
         return "frontend/index"
     }
 
-    @RequestMapping("/resource/{gameid}/{resid}")
+    @RequestMapping("/resource/{gameId}/{resId}")
     fun serveResource(response: HttpServletResponse,
-                      @PathVariable("gameid") gameId: UUID?,
-                      @PathVariable("resid") resId: String) {
+                      @PathVariable("gameId") gameId: UUID?,
+                      @PathVariable("resId") resId: String) {
 
         val gameController = gameState.getGameController(gameId) ?: return response.sendRedirect("/frontend/index")
         val res: InputStream? = gameController.resolveResource(resId)

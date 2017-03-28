@@ -25,25 +25,25 @@ open class BackendController(
     @GetMapping("/game")
     fun preventStackTrace(): String = "redirect:/backend/index"
 
-    @GetMapping("/game/{gameid}")
-    fun game(@PathVariable("gameid") gameId: UUID?, model: Model): String {
+    @GetMapping("/game/{gameId}")
+    fun game(@PathVariable("gameId") gameId: UUID?, model: Model): String {
         val gameController = gameState.getGameController(gameId) ?: return "redirect:/backend/index"
         model.addAttribute("game", gameController.game)
         return if (gameController.game.dataLoaded) "backend/game" else "backend/init_game"
     }
 
-    @PostMapping("/game/{gameid}/load")
-    fun load_data(@PathVariable("gameid") gameId: UUID,
+    @PostMapping("/game/{gameId}/load")
+    fun load_data(@PathVariable("gameId") gameId: UUID,
                   @RequestParam("game_data") gameData: MultipartFile): String {
         val gameController = gameState.getGameController(gameId) ?: return "redirect:/backend/index"
         gameController.loadGameData(gameData)
         return "redirect:/backend/game/$gameId"
     }
 
-    @GetMapping("/game/{gameid}/player/{playerid}")
+    @GetMapping("/game/{gameId}/player/{playerId}")
     fun edit_player_form(
-            @PathVariable("gameid") gameId: UUID?,
-            @PathVariable("playerid") playerId: UUID?,
+            @PathVariable("gameId") gameId: UUID?,
+            @PathVariable("playerId") playerId: UUID?,
             model: Model): String {
 
         val gameController = gameState.getGameController(gameId) ?: return "redirect:/backend/index"
@@ -53,10 +53,10 @@ open class BackendController(
         return "backend/editplayer"
     }
 
-    @PostMapping("/game/{gameid}/player/{playerid}")
+    @PostMapping("/game/{gameId}/player/{playerId}")
     fun edit_player_action(
-            @PathVariable("gameid") gameId: UUID?,
-            @PathVariable("playerid") playerId: UUID?,
+            @PathVariable("gameId") gameId: UUID?,
+            @PathVariable("playerId") playerId: UUID?,
             @RequestParam("player_name") player_name: String,
             @RequestParam("player_color") player_color: String,
             @RequestParam("player_points") player_points: String,
@@ -69,8 +69,8 @@ open class BackendController(
         return "redirect:/backend/game/$gameId/players"
     }
 
-    @PostMapping("/game/{gameid}/players")
-    fun add_player(@PathVariable("gameid") gameId: UUID,
+    @PostMapping("/game/{gameId}/players")
+    fun add_player(@PathVariable("gameId") gameId: UUID,
                    @RequestParam("player_name") player_name: String): String {
 
         val gameController = gameState.getGameController(gameId) ?: return "redirect:/backend/index"
@@ -78,16 +78,16 @@ open class BackendController(
         return "redirect:/backend/game/$gameId/players"
     }
 
-    @GetMapping("/game/{gameid}/players")
-    fun list_players(@PathVariable("gameid") gameId: UUID?, model: Model): String {
+    @GetMapping("/game/{gameId}/players")
+    fun list_players(@PathVariable("gameId") gameId: UUID?, model: Model): String {
         val gameController = gameState.getGameController(gameId) ?: return "redirect:/backend/index"
         model.addAttribute("game", gameController.game)
         return "backend/players"
     }
 
-    @GetMapping("/game/{gameid}/field/{col}/{row}")
+    @GetMapping("/game/{gameId}/field/{col}/{row}")
     fun display_field(
-            @PathVariable("gameid") gameId: UUID?,
+            @PathVariable("gameId") gameId: UUID?,
             @PathVariable("col") col: Int?,
             @PathVariable("row") row: Int?,
             model: Model): String {
