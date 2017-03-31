@@ -140,15 +140,15 @@ document.addEventListener("DOMContentLoaded", function () {
         this.audio = ko.observable();
 
         this.shown = ko.pureComputed(function () {
-            return this.image() !== null
-                || this.text() !== null
-                || this.audio() !== null;
+            return this.image() !== undefined
+                || this.text() !== undefined
+                || this.audio() !== undefined;
         }, this);
 
         this.clear = function () {
-            this.image(null);
-            this.text(null);
-            this.audio(null);
+            this.image(undefined);
+            this.text(undefined);
+            this.audio(undefined);
         }
     };
 
