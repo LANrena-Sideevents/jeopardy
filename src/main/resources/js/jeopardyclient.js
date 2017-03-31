@@ -38,22 +38,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 break;
 
             case "OverlayEvent":
-                let overlay = document.getElementById("overlay");
-                overlay.style.display = "block";
-
                 let payload = message['payload'];
                 if (payload.startsWith("image:")) {
-                    let image = payload.substr(6);
-                    payload = document.createElement("img");
-                    payload.setAttribute("src", "/resource/" + Jeopardy.SelectedGame().id() + "/" + image);
-                    overlay.appendChild(payload);
+                    Jeopardy.Overlay.image("/resource/" + Jeopardy.SelectedGame().id() + "/" + payload.substr(6));
                 } else {
-                    overlay.innerHTML = payload;
+                    Jeopardy.Overlay.text(payload)
                 }
                 break;
 
             case "ClearOverlayEvent":
-                document.getElementById("overlay").style.display = "none";
+                Jeopardy.Overlay.clear();
                 break;
         }
     };
@@ -139,7 +133,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
     Jeopardy.Games = ko.observableArray();
     Jeopardy.SelectedGame = ko.observable();
-    Jeopardy.Overlay = ko.observable();
+
+    Jeopardy.Overlay = new function () {
+        this.image = ko.observable();
+        this.text = ko.observable();
+        this.audio = ko.observable();
+
+        this.shown = ko.pureComputed(function () {
+            return this.image() !== null
+                || this.text() !== null
+                || this.audio() !== null;
+        }, this);
+
+        this.clear = function () {
+            this.image(null);
+            this.text(null);
+            this.audio(null);
+        }
+    };
 
     window.stomp.connect({}, function () {
         ko.applyBindings(Jeopardy);

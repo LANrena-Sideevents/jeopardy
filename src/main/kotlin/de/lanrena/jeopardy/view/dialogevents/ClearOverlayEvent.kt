@@ -4,5 +4,5 @@ import de.lanrena.jeopardy.view.JsonMessage
 
 class ClearOverlayEvent
     : JsonMessage(
-        type = "OverlayEvent",
+        type = "ClearOverlayEvent",
         payload = "")

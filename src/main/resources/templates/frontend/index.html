@@ -18,7 +18,11 @@
     </ul>
 </div>
 
-<div id="overlay"/>
+<div id="overlay" data-bind="if: Jeopardy.Overlay.shown">
+    <div data-bind="text: Jeopardy.Overlay.text"/>
+    <img data-bind="attr:{src: Jeopardy.Overlay.image}"/>
+    <audio data-bind="attr:{src: Jeopardy.Overlay.audio}" loop="true" autoplay="true"/>
+</div>
 
 <table id="gameboard" data-bind="if: SelectedGame">
     <tr data-bind="with: SelectedGame().Categories">
