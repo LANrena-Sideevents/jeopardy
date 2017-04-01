@@ -41,6 +41,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 let payload = message['payload'];
                 if (payload.startsWith("image:")) {
                     Jeopardy.Overlay.image("/resource/" + Jeopardy.SelectedGame().id() + "/" + payload.substr(6));
+                }
+                if (payload.startsWith("audio:")) {
+                    // https://commons.wikimedia.org/wiki/File:Speaker_Icon.svg
+                    Jeopardy.Overlay.image("https://upload.wikimedia.org/wikipedia/commons/2/21/Speaker_Icon.svg");
+                    Jeopardy.Overlay.audio("/resource/" + Jeopardy.SelectedGame().id() + "/" + payload.substr(6));
                 } else {
                     Jeopardy.Overlay.text(payload)
                 }
@@ -149,6 +154,19 @@ document.addEventListener("DOMContentLoaded", function () {
             this.image(undefined);
             this.text(undefined);
             this.audio(undefined);
+        }
+    };
+
+    ko.bindingHandlers.audioBind = {
+        update: function (element, valueAccessor) {
+            let value = ko.unwrap(valueAccessor());
+            if (value === undefined) {
+                element.pause();
+                element.src = '';
+            } else {
+                element.src = value;
+                element.play();
+            }
         }
     };
 
