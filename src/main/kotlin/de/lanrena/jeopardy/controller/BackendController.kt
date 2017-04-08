@@ -109,6 +109,34 @@ open class BackendController(
         return "backend/field"
     }
 
+    @PostMapping("/game/{gameId}/field/{col}/{row}")
+    fun post_answer(
+            @PathVariable("gameId") gameId: UUID?,
+            @PathVariable("col") col: Int?,
+            @PathVariable("row") row: Int?,
+            @RequestParam("player") player: UUID?,
+            @RequestParam("points") points: Int,
+            @RequestParam("answer") answer: String): String {
+
+        val gameController = gameState.getGameController(gameId) ?: return "redirect:/backend/index"
+        val fieldController = gameController.getFieldController(col, row) ?: return "redirect:/backend/index"
+        fieldController.markDone()
+
+        var pointsChange = points
+        if (answer == "Wrong") {
+            pointsChange *= -1
+        }
+
+        val playerController = gameController.getPlayerController(player) ?: return "redirect:/backend/game/$gameId"
+        playerController.updateScore(points)
+
+        if (answer == "wrong" && !fieldController.field.bonus) {
+            return "redirect:/backend/game/$gameId/field/$col/$row"
+        } else {
+            return "redirect:/backend/game/$gameId"
+        }
+    }
+
     @PostMapping("game")
     fun create_game(): String {
         gameState.createGame()

@@ -15,4 +15,8 @@ class PlayerController(
         player.points = points
         sender.send(PlayerEvent(player))
     }
+
+    fun updateScore(deltaPoints: Int) {
+        player.points += deltaPoints
+    }
 }

@@ -2,4 +2,8 @@ package de.lanrena.jeopardy.controller
 
 import de.lanrena.jeopardy.model.Field
 
-class FieldController(val field: Field)
+class FieldController(val field: Field) {
+    fun markDone() {
+        field.done = true
+    }
+}
