@@ -25,23 +25,46 @@
         <li class="active" th:text="@{|Field ${field.col},${field.row}|}"/>
     </ol>
 
-    <div class="col-sm-12 alert alert-danger" role="alert" th:if="${field.bonus}"/>
-
-    <div class="container col-sm-12">
-        <div class="btn-group" role="group" aria-label="...">
-            <a type="button" class="btn btn-default">None</a>
-            <a type="button" class="btn btn-default"
-               th:each="player : ${game.players}"
-               th:text="${player.name}"/>
+    <form class="container col-sm-12 form-horizontal">
+        <div class="form-group">
+            <div class="btn-group btn-group-lg" data-toggle="buttons">
+                <label class="btn btn-primary btn-warning active">
+                    <input type="radio" name="options" value="none" autocomplete="off" checked="checked"/>None
+                </label>
+                <label class="btn btn-primary" th:each="player : ${game.players}">
+                    <input type="radio" name="options" th:value="${game.id}" autocomplete="off"/>
+                    <span th:text="${player.name}" th:remove="tag"/>
+                </label>
+            </div>
         </div>
-    </div>
 
-    <img class="col-sm-8 col-offset-2" th:src="@{|/resource/${game.id}/${#strings.substring(field.question,6)}|}"
-         th:if="${#strings.startsWith(field.question, 'image:')}"/>
-    <div th:text="${field.question}"
-         th:unless="${#strings.startsWith(field.question, 'image:')}"/>
+        <div class="form-group input-group-lg" th:classappend="${field.bonus} ? input-group : ''">
+            <label class="input-group-addon" th:if="${field.bonus}">Daily Double</label>
+            <input type="number" step="100"
+                   value="points" class="form-control"
+                   th:value="${field.row*100}"
+                   th:placeholder="${field.row*100}"
+                   th:aria-describedby="@{|label${player.id}|}"
+                   th:readonly="${!field.bonus}"/>
+        </div>
 
-    <div class="col-sm-12 well well-sm" th:text="${field.answer}"/>
+        <div class="form-group">
+            <img class="col-sm-8 col-offset-2"
+                 th:src="@{|/resource/${game.id}/${#strings.substring(field.question,6)}|}"
+                 th:if="${#strings.startsWith(field.question, 'image:')}"/>
+            <div th:text="${field.question}"
+                 th:unless="${#strings.startsWith(field.question, 'image:')}"/>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12 well well-sm" th:text="${field.answer}"/>
+        </div>
+
+        <div class="form-group btn-group-lg">
+            <input type="submit" value="correct" class="btn btn-success"/>
+            <input type="submit" value="wrong" class="btn btn-danger"/>
+        </div>
+    </form>
 </div>
 </body>
 </html>
