@@ -5,6 +5,7 @@ import de.lanrena.jeopardy.model.Game
 import de.lanrena.jeopardy.model.Player
 import de.lanrena.jeopardy.view.stickyevents.CategoryEvent
 import de.lanrena.jeopardy.view.stickyevents.CombinedEvent
+import de.lanrena.jeopardy.view.stickyevents.FieldEvent
 import de.lanrena.jeopardy.view.stickyevents.PlayerEvent
 import org.springframework.web.multipart.MultipartFile
 import java.io.File
@@ -39,6 +40,7 @@ class GameController(
         val initialData: MutableList<de.lanrena.jeopardy.view.JsonMessage> = mutableListOf()
         initialData.addAll(game.players.map(::PlayerEvent))
         initialData.addAll(game.categories.map(::CategoryEvent))
+        initialData.addAll(game.fields.map(::FieldEvent))
         return CombinedEvent(initialData)
     }
 

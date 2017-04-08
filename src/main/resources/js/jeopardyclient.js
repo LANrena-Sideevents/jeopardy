@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             case "FieldEvent":
                 let field = document.getElementById('row' + message['payload']['row'] + 'col' + message['payload']['col']);
+                if (message['payload']['disabled'])
                 field.className += "disabled";
                 break;
 
