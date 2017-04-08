@@ -5,5 +5,6 @@ data class Field(
         val col: Int,
         val question: String,
         val answer: String,
-        val bonus: Boolean,
-        var done: Boolean = false)
+        val bonus: Boolean = false,
+        var done: Boolean = false,
+        var player: Player? = null)

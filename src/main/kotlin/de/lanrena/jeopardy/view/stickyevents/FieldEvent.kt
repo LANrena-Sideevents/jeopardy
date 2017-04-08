@@ -1,6 +1,6 @@
 package de.lanrena.jeopardy.view.stickyevents
 
-import de.lanrena.jeopardy.model.FieldState
+import de.lanrena.jeopardy.model.Field
 import de.lanrena.jeopardy.model.Player
 import de.lanrena.jeopardy.view.JsonMessage
 
@@ -16,10 +16,10 @@ class SimplifiedField(val col: Int,
     }
 }
 
-class FieldEvent(field: FieldState)
+class FieldEvent(field: Field)
     : JsonMessage(type = "FieldEvent",
         payload = SimplifiedField(
-                col = field.field.col,
-                row = field.field.row,
-                disabled = field.player != null,
+                col = field.col,
+                row = field.row,
+                disabled = field.done,
                 player = field.player))

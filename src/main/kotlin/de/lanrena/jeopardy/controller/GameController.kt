@@ -44,7 +44,7 @@ class GameController(
 
     fun getFieldController(col: Int?, row: Int?): FieldController? {
         val field = game.fields.firstOrNull { it.col == col && it.row == row } ?: return null
-        return FieldController(field)
+        return FieldController(field, sender)
     }
 
     fun getPlayerController(playerId: UUID?): PlayerController? {

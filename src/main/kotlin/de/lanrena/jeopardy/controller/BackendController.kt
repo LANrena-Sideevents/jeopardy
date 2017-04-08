@@ -1,5 +1,6 @@
 package de.lanrena.jeopardy.controller
 
+import de.lanrena.jeopardy.model.Player
 import de.lanrena.jeopardy.view.dialogevents.ClearOverlayEvent
 import de.lanrena.jeopardy.view.dialogevents.DisplayMessageEvent
 import de.lanrena.jeopardy.view.dialogevents.OverlayEvent
@@ -119,17 +120,22 @@ open class BackendController(
             @RequestParam("points") points: Int,
             @RequestParam("answer") answer: String): String {
 
-        val gameController = gameState.getGameController(gameId) ?: return "redirect:/backend/index"
-        val fieldController = gameController.getFieldController(col, row) ?: return "redirect:/backend/index"
-        fieldController.markDone()
-
         var pointsChange = points
         if (answer == "Wrong") {
             pointsChange *= -1
         }
 
-        val playerController = gameController.getPlayerController(player) ?: return "redirect:/backend/game/$gameId"
-        playerController.updateScore(pointsChange)
+        val gameController = gameState.getGameController(gameId) ?: return "redirect:/backend/index"
+
+        var resolvedPlayer: Player? = null
+        if (player != null) {
+            val playerController = gameController.getPlayerController(player) ?: return "redirect:/backend/index"
+            playerController.updateScore(pointsChange)
+            resolvedPlayer = playerController.player
+        }
+
+        val fieldController = gameController.getFieldController(col, row) ?: return "redirect:/backend/index"
+        fieldController.markDone(player = resolvedPlayer)
 
         if (answer == "wrong" && !fieldController.field.bonus) {
             return "redirect:/backend/game/$gameId/field/$col/$row"
