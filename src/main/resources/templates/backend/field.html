@@ -34,7 +34,7 @@
                     <input type="radio" name="player" value="" autocomplete="off" checked="checked"/>None
                 </label>
                 <label class="btn btn-primary" th:each="player : ${game.players}">
-                    <input type="radio" name="player" th:value="${game.id}" autocomplete="off"/>
+                    <input type="radio" name="player" th:value="${player.id}" autocomplete="off"/>
                     <span th:text="${player.name}" th:remove="tag"/>
                 </label>
             </div>

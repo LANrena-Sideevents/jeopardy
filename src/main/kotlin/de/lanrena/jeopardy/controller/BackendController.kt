@@ -129,7 +129,7 @@ open class BackendController(
         }
 
         val playerController = gameController.getPlayerController(player) ?: return "redirect:/backend/game/$gameId"
-        playerController.updateScore(points)
+        playerController.updateScore(pointsChange)
 
         if (answer == "wrong" && !fieldController.field.bonus) {
             return "redirect:/backend/game/$gameId/field/$col/$row"

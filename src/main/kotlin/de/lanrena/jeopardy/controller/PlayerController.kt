@@ -9,7 +9,9 @@ class PlayerController(
         val game: Game,
         val sender: TopicSender) {
 
-    fun updatePlayer(name: String, color: String, points: Int) {
+    fun updatePlayer(name: String = player.name,
+                     color: String = player.color,
+                     points: Int = player.points) {
         player.name = name
         player.color = color
         player.points = points
@@ -17,6 +19,6 @@ class PlayerController(
     }
 
     fun updateScore(deltaPoints: Int) {
-        player.points += deltaPoints
+        updatePlayer(points = player.points + deltaPoints)
     }
 }
