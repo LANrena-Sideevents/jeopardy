@@ -32,9 +32,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 break;
 
             case "FieldEvent":
-                let field = document.getElementById(message['payload']['field']);
-                field.style.background = message['payload']['color'];
-                field.innerText = '';
+                let field = document.getElementById('row' + message['payload']['row'] + 'col' + message['payload']['col']);
+                field.className += "disabled";
                 break;
 
             case "OverlayEvent":
