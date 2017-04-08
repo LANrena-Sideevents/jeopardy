@@ -2,7 +2,6 @@ package de.lanrena.jeopardy.controller
 
 import de.lanrena.jeopardy.model.Player
 import de.lanrena.jeopardy.view.dialogevents.ClearOverlayEvent
-import de.lanrena.jeopardy.view.dialogevents.DisplayMessageEvent
 import de.lanrena.jeopardy.view.dialogevents.OverlayEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.simp.SimpMessagingTemplate
@@ -147,12 +146,6 @@ open class BackendController(
     @PostMapping("game")
     fun create_game(): String {
         gameState.createGame()
-        return "redirect:/backend"
-    }
-
-    @GetMapping("/message")
-    fun send_message(): String {
-        template.convertAndSend("/topic/messages", DisplayMessageEvent("asdf test 123"))
         return "redirect:/backend"
     }
 }
