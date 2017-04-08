@@ -31,6 +31,7 @@ open class BackendController(
     fun game(@PathVariable("gameId") gameId: UUID?, model: Model): String {
         val gameController = gameState.getGameController(gameId) ?: return "redirect:/backend/index"
         model.addAttribute("game", gameController.game)
+        model.addAttribute("gamecontroller", gameController)
 
         return when {
             gameController.game.dataLoaded -> {
