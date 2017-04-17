@@ -41,8 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 let payload = message['payload'];
                 if (payload.startsWith("image:")) {
                     Jeopardy.Overlay.image("/resource/" + Jeopardy.SelectedGame().id() + "/" + payload.substr(6));
-                }
-                if (payload.startsWith("audio:")) {
+                } else if (payload.startsWith("audio:")) {
                     // https://commons.wikimedia.org/wiki/File:Speaker_Icon.svg
                     Jeopardy.Overlay.image("https://upload.wikimedia.org/wikipedia/commons/2/21/Speaker_Icon.svg");
                     Jeopardy.Overlay.audio("/resource/" + Jeopardy.SelectedGame().id() + "/" + payload.substr(6));
@@ -144,6 +143,7 @@ document.addEventListener("DOMContentLoaded", function () {
         this.text = ko.observable();
         this.audio = ko.observable();
 
+        //noinspection JSUnusedGlobalSymbols
         this.shown = ko.pureComputed(function () {
             return this.image() !== undefined
                 || this.text() !== undefined
