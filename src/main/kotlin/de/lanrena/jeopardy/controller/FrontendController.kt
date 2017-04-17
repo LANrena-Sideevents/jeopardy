@@ -24,8 +24,12 @@ open class FrontendController(
                       @PathVariable("gameId") gameId: UUID?,
                       @PathVariable("resId") resId: String) {
 
-        val gameController = gameState.getGameController(gameId) ?: return response.sendError(404)
-        val res: InputStream = gameController.resolveResource(resId) ?: return response.sendError(404)
+        val gameController = gameState.getGameController(gameId)
+                ?: return response.sendError(404)
+
+        val res: InputStream = gameController.resolveResource(resId)
+                ?: return response.sendError(404)
+
         val size = StreamUtils.copy(res, response.outputStream).toLong()
         response.setContentLengthLong(size)
     }

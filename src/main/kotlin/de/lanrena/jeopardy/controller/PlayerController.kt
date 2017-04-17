@@ -12,6 +12,7 @@ class PlayerController(
     fun updatePlayer(name: String = player.name,
                      color: String = player.color,
                      points: Int = player.points) {
+
         player.name = name
         player.color = color
         player.points = points

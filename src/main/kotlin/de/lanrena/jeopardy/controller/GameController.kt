@@ -45,7 +45,10 @@ class GameController(
     }
 
     fun getFieldController(col: Int?, row: Int?): FieldController? {
-        val field = game.fields.firstOrNull { it.col == col && it.row == row } ?: return null
+        val field = game.fields.firstOrNull {
+            it.col == col && it.row == row
+        } ?: return null
+
         return FieldController(field, sender)
     }
 
@@ -54,5 +57,8 @@ class GameController(
         return PlayerController(player, game, sender)
     }
 
-    fun resolveResource(resId: String): InputStream? = game.resources.filterKeys { it.startsWith(resId) }.entries.first().value.get()
+    fun resolveResource(resId: String): InputStream? =
+            game.resources.filterKeys {
+                it.startsWith(resId)
+            }.entries.first().value.get()
 }

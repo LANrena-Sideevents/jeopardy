@@ -29,7 +29,9 @@ open class BackendController(
 
     @GetMapping("/game/{gameId}")
     fun game(@PathVariable("gameId") gameId: UUID?, model: Model): String {
-        val gameController = gameState.getGameController(gameId) ?: return "redirect:/backend/index"
+        val gameController = gameState.getGameController(gameId)
+                ?: return "redirect:/backend/index"
+
         model.addAttribute("game", gameController.game)
         model.addAttribute("gamecontroller", gameController)
 
@@ -45,7 +47,9 @@ open class BackendController(
     @PostMapping("/game/{gameId}/load")
     fun load_data(@PathVariable("gameId") gameId: UUID,
                   @RequestParam("game_data") gameData: MultipartFile): String {
-        val gameController = gameState.getGameController(gameId) ?: return "redirect:/backend/index"
+        val gameController = gameState.getGameController(gameId)
+                ?: return "redirect:/backend/index"
+
         gameController.loadGameData(gameData)
         return "redirect:/backend/game/$gameId"
     }
@@ -56,8 +60,12 @@ open class BackendController(
             @PathVariable("playerId") playerId: UUID?,
             model: Model): String {
 
-        val gameController = gameState.getGameController(gameId) ?: return "redirect:/backend/index"
-        val playerController = gameController.getPlayerController(playerId) ?: return "redirect:/backend/game/$gameId"
+        val gameController = gameState.getGameController(gameId)
+                ?: return "redirect:/backend/index"
+
+        val playerController = gameController.getPlayerController(playerId)
+                ?: return "redirect:/backend/game/$gameId"
+
         model.addAttribute("game", gameController.game)
         model.addAttribute("player", playerController.player)
         return "backend/editplayer"
@@ -72,8 +80,12 @@ open class BackendController(
             @RequestParam("player_points") player_points: String,
             model: Model): String {
 
-        val gameController = gameState.getGameController(gameId) ?: return "redirect:/backend/index"
-        val playerController = gameController.getPlayerController(playerId) ?: return "redirect:/backend/game/$gameId/player/$playerId"
+        val gameController = gameState.getGameController(gameId)
+                ?: return "redirect:/backend/index"
+
+        val playerController = gameController.getPlayerController(playerId)
+                ?: return "redirect:/backend/game/$gameId/player/$playerId"
+
         playerController.updatePlayer(player_name, player_color, player_points.toInt())
         model.addAttribute("game", gameController.game)
         return "redirect:/backend/game/$gameId/players"
@@ -83,14 +95,20 @@ open class BackendController(
     fun add_player(@PathVariable("gameId") gameId: UUID,
                    @RequestParam("player_name") player_name: String): String {
 
-        val gameController = gameState.getGameController(gameId) ?: return "redirect:/backend/index"
+        val gameController = gameState.getGameController(gameId)
+                ?: return "redirect:/backend/index"
+
         gameController.addPlayer(player_name)
         return "redirect:/backend/game/$gameId/players"
     }
 
     @GetMapping("/game/{gameId}/players")
-    fun list_players(@PathVariable("gameId") gameId: UUID?, model: Model): String {
-        val gameController = gameState.getGameController(gameId) ?: return "redirect:/backend/index"
+    fun list_players(@PathVariable("gameId") gameId: UUID?,
+                     model: Model): String {
+
+        val gameController = gameState.getGameController(gameId)
+                ?: return "redirect:/backend/index"
+
         model.addAttribute("game", gameController.game)
         return "backend/players"
     }
@@ -102,8 +120,12 @@ open class BackendController(
             @PathVariable("row") row: Int?,
             model: Model): String {
 
-        val gameController = gameState.getGameController(gameId) ?: return "redirect:/backend/index"
-        val fieldController = gameController.getFieldController(col, row) ?: return "redirect:/backend/index"
+        val gameController = gameState.getGameController(gameId)
+                ?: return "redirect:/backend/index"
+
+        val fieldController = gameController.getFieldController(col, row)
+                ?: return "redirect:/backend/index"
+
         model.addAttribute("game", gameController.game)
         model.addAttribute("field", fieldController.field)
         gameController.sender.send(OverlayEvent(fieldController.field))
@@ -124,16 +146,21 @@ open class BackendController(
             pointsChange *= -1
         }
 
-        val gameController = gameState.getGameController(gameId) ?: return "redirect:/backend/index"
+        val gameController = gameState.getGameController(gameId)
+                ?: return "redirect:/backend/index"
 
         var resolvedPlayer: Player? = null
         if (player != null) {
-            val playerController = gameController.getPlayerController(player) ?: return "redirect:/backend/index"
+            val playerController = gameController.getPlayerController(player)
+                    ?: return "redirect:/backend/index"
+
             playerController.updateScore(pointsChange)
             resolvedPlayer = playerController.player
         }
 
-        val fieldController = gameController.getFieldController(col, row) ?: return "redirect:/backend/index"
+        val fieldController = gameController.getFieldController(col, row)
+                ?: return "redirect:/backend/index"
+
         fieldController.markDone(player = resolvedPlayer)
 
         if (answer == "wrong" && !fieldController.field.bonus) {
