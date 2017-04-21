@@ -45,6 +45,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     // https://commons.wikimedia.org/wiki/File:Speaker_Icon.svg
                     Jeopardy.Overlay.image("https://upload.wikimedia.org/wikipedia/commons/2/21/Speaker_Icon.svg");
                     Jeopardy.Overlay.audio("/resource/" + Jeopardy.SelectedGame().id() + "/" + payload.substr(6));
+                } else if (payload.startsWith("big:")) {
+                    Jeopardy.Overlay.headline(payload.substr(4))
                 } else {
                     Jeopardy.Overlay.text(payload)
                 }
@@ -142,18 +144,21 @@ document.addEventListener("DOMContentLoaded", function () {
         this.image = ko.observable();
         this.text = ko.observable();
         this.audio = ko.observable();
+        this.headline = ko.observable();
 
         //noinspection JSUnusedGlobalSymbols
         this.shown = ko.pureComputed(function () {
             return this.image() !== undefined
                 || this.text() !== undefined
-                || this.audio() !== undefined;
+                || this.audio() !== undefined
+                || this.headline() !== undefined;
         }, this);
 
         this.clear = function () {
             this.image(undefined);
             this.text(undefined);
             this.audio(undefined);
+            this.headline(undefined);
         }
     };
 
