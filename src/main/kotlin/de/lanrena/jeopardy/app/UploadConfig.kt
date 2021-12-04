@@ -1,7 +1,7 @@
 package de.lanrena.jeopardy.app
 
-import org.springframework.boot.autoconfigure.web.MultipartAutoConfiguration
-import org.springframework.boot.autoconfigure.web.MultipartProperties
+import org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration
+import org.springframework.boot.autoconfigure.web.servlet.MultipartProperties
 import org.springframework.context.annotation.Configuration
 import javax.servlet.MultipartConfigElement
 
