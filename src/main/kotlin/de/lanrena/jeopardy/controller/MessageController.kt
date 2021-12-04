@@ -13,9 +13,9 @@ open class MessageController(
         @Autowired val jeopardyController: JeopardyController) {
 
     @SubscribeMapping("/topic/games")
-    fun list_games(): Any = GameEvent(*jeopardyController.listGames().toTypedArray())
+    fun listGames(): Any = GameEvent(*jeopardyController.listGames().toTypedArray())
 
     @SubscribeMapping("/topic/game/{gameId}")
-    fun subscribe_game(@DestinationVariable("gameId") gameId: UUID): Any? =
+    fun subscribeGame(@DestinationVariable("gameId") gameId: UUID): Any? =
             jeopardyController.getGameController(gameId)?.getCombinedState()
 }

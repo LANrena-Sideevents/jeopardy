@@ -45,8 +45,8 @@ open class BackendController(
     }
 
     @PostMapping("/game/{gameId}/load")
-    fun load_data(@PathVariable("gameId") gameId: UUID,
-                  @RequestParam("game_data") gameData: MultipartFile): String {
+    fun loadData(@PathVariable("gameId") gameId: UUID,
+                 @RequestParam("game_data") gameData: MultipartFile): String {
         val gameController = gameState.getGameController(gameId)
                 ?: return "redirect:/backend/index"
 
@@ -55,7 +55,7 @@ open class BackendController(
     }
 
     @GetMapping("/game/{gameId}/player/{playerId}")
-    fun edit_player_form(
+    fun editPlayerForm(
             @PathVariable("gameId") gameId: UUID?,
             @PathVariable("playerId") playerId: UUID?,
             model: Model): String {
@@ -72,7 +72,7 @@ open class BackendController(
     }
 
     @PostMapping("/game/{gameId}/player/{playerId}")
-    fun edit_player_action(
+    fun editPlayerAction(
             @PathVariable("gameId") gameId: UUID?,
             @PathVariable("playerId") playerId: UUID?,
             @RequestParam("player_name") player_name: String,
@@ -92,8 +92,8 @@ open class BackendController(
     }
 
     @PostMapping("/game/{gameId}/players")
-    fun add_player(@PathVariable("gameId") gameId: UUID,
-                   @RequestParam("player_name") player_name: String): String {
+    fun addPlayer(@PathVariable("gameId") gameId: UUID,
+                  @RequestParam("player_name") player_name: String): String {
 
         val gameController = gameState.getGameController(gameId)
                 ?: return "redirect:/backend/index"
@@ -103,8 +103,8 @@ open class BackendController(
     }
 
     @GetMapping("/game/{gameId}/players")
-    fun list_players(@PathVariable("gameId") gameId: UUID?,
-                     model: Model): String {
+    fun listPlayers(@PathVariable("gameId") gameId: UUID?,
+                    model: Model): String {
 
         val gameController = gameState.getGameController(gameId)
                 ?: return "redirect:/backend/index"
@@ -114,7 +114,7 @@ open class BackendController(
     }
 
     @GetMapping("/game/{gameId}/field/{col}/{row}")
-    fun display_field(
+    fun displayField(
             @PathVariable("gameId") gameId: UUID?,
             @PathVariable("col") col: Int?,
             @PathVariable("row") row: Int?,
@@ -133,7 +133,7 @@ open class BackendController(
     }
 
     @PostMapping("/game/{gameId}/field/{col}/{row}")
-    fun post_answer(
+    fun postAnswer(
             @PathVariable("gameId") gameId: UUID?,
             @PathVariable("col") col: Int?,
             @PathVariable("row") row: Int?,
@@ -171,7 +171,7 @@ open class BackendController(
     }
 
     @PostMapping("game")
-    fun create_game(): String {
+    fun createGame(): String {
         gameState.createGame()
         return "redirect:/backend"
     }
