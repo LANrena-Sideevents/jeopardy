@@ -20,12 +20,12 @@ dependencies {
     implementation("com.googlecode.json-simple:json-simple:1.1.1")
 
     // frontend
-    implementation("org.webjars:sockjs-client:1.1.1")
-    implementation("org.webjars:stomp-websocket:2.3.3")
-    implementation("org.webjars:knockout:3.4.1")
+    implementation("org.webjars:sockjs-client:1.5.1")
+    implementation("org.webjars:stomp-websocket:2.3.4")
+    implementation("org.webjars:knockout:3.5.1")
 
     // backend
-    implementation("org.webjars:jquery:3.1.1-1")
+    implementation("org.webjars:jquery:3.6.0")
     implementation("org.webjars:tether:1.4.0")
-    implementation("org.webjars:bootstrap:3.3.7-1")
+    implementation("org.webjars:bootstrap:5.1.1")
 }
