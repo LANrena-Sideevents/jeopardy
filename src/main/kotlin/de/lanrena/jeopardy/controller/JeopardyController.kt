@@ -22,7 +22,7 @@ class JeopardyController {
     fun listGames(): List<Game> = games.filter { !it.finished }
 
     fun getGameController(id: UUID?): GameController? {
-        val game = games.filter { it.id == id }.firstOrNull() ?: return null
+        val game = games.firstOrNull { it.id == id } ?: return null
         return GameController(game, object : TopicSender {
             override fun send(message: Any): Unit? =
                     template?.convertAndSend("/topic/game/${game.id}", message)

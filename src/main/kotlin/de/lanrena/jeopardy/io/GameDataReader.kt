@@ -33,7 +33,7 @@ class GameDataReader(gameDataFile: File) {
         }
     }
 
-    fun parseJson(reader: Reader) {
+    private fun parseJson(reader: Reader) {
         val parser = JSONParser()
         val obj: JSONObject = parser.parse(reader) as JSONObject
         name = obj["name"] as String
@@ -65,8 +65,8 @@ class GameDataReader(gameDataFile: File) {
         }
     }
 
-    fun parseResource(archive: ZipFile, entry: ZipArchiveEntry) {
+    private fun parseResource(archive: ZipFile, entry: ZipArchiveEntry) {
         val key = Paths.get(entry.name).fileName.toString()
-        resources.put(key, Supplier<InputStream> { archive.getInputStream(entry) })
+        resources[key] = Supplier<InputStream> { archive.getInputStream(entry) }
     }
 }

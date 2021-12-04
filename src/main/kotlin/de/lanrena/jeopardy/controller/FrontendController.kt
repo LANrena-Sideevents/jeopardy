@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse
 open class FrontendController(
         @Autowired val gameState: JeopardyController) {
 
-    @RequestMapping(path = arrayOf("/", "frontend/index"))
+    @RequestMapping(path = ["/", "frontend/index"])
     fun index(): String {
         return "frontend/index"
     }

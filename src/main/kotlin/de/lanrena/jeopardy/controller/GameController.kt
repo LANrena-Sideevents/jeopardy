@@ -27,7 +27,7 @@ class GameController(
         gameDataFile.transferTo(tempFile)
         tempFile.deleteOnExit()
 
-        val gameDataReader: GameDataReader = GameDataReader(tempFile)
+        val gameDataReader = GameDataReader(tempFile)
         game.categories.addAll(gameDataReader.categories)
         game.fields.addAll(gameDataReader.fields)
         game.resources.putAll(gameDataReader.resources)
@@ -53,7 +53,7 @@ class GameController(
     }
 
     fun getPlayerController(playerId: UUID?): PlayerController? {
-        val player = game.players.filter { it.id == playerId }.firstOrNull() ?: return null
+        val player = game.players.firstOrNull { it.id == playerId } ?: return null
         return PlayerController(player, game, sender)
     }
 

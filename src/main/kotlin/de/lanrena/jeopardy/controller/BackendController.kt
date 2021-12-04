@@ -163,10 +163,10 @@ open class BackendController(
 
         fieldController.markDone(player = resolvedPlayer)
 
-        if (answer == "wrong" && !fieldController.field.bonus) {
-            return "redirect:/backend/game/$gameId/field/$col/$row"
+        return if (answer == "wrong" && !fieldController.field.bonus) {
+            "redirect:/backend/game/$gameId/field/$col/$row"
         } else {
-            return "redirect:/backend/game/$gameId"
+            "redirect:/backend/game/$gameId"
         }
     }
 
