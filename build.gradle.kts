@@ -16,7 +16,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-websocket")
     implementation(kotlin("stdlib"))
     implementation("com.intellij:annotations:12.0")
-    implementation("org.apache.commons:commons-compress:1.13")
+    implementation("org.apache.commons:commons-compress:1.21")
     implementation("com.googlecode.json-simple:json-simple:1.1.1")
 
     // frontend
