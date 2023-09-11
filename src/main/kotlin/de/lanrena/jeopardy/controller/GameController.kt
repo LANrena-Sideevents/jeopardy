@@ -3,12 +3,13 @@ package de.lanrena.jeopardy.controller
 import de.lanrena.jeopardy.io.GameDataReader
 import de.lanrena.jeopardy.model.Game
 import de.lanrena.jeopardy.model.Player
-import de.lanrena.jeopardy.view.stickyevents.CategoryEvent
-import de.lanrena.jeopardy.view.stickyevents.CombinedEvent
-import de.lanrena.jeopardy.view.stickyevents.FieldEvent
-import de.lanrena.jeopardy.view.stickyevents.PlayerEvent
-import org.springframework.web.multipart.MultipartFile
+import de.lanrena.jeopardy.view.CategoryEvent
+import de.lanrena.jeopardy.view.CombinedEvent
+import de.lanrena.jeopardy.view.FieldEvent
+import de.lanrena.jeopardy.view.JsonMessage
+import de.lanrena.jeopardy.view.PlayerEvent
 import java.io.File
+import java.io.FileOutputStream
 import java.io.InputStream
 import java.util.*
 
@@ -22,9 +23,9 @@ class GameController(
         sender.send(PlayerEvent(player))
     }
 
-    fun loadGameData(gameDataFile: MultipartFile) {
+    fun loadGameData(gameDataStream: InputStream) {
         val tempFile = File.createTempFile(game.id.toString(), null)
-        gameDataFile.transferTo(tempFile)
+        gameDataStream.transferTo(FileOutputStream(tempFile))
         tempFile.deleteOnExit()
 
         val gameDataReader = GameDataReader(tempFile)
@@ -37,7 +38,7 @@ class GameController(
     }
 
     fun getCombinedState(): CombinedEvent {
-        val initialData: MutableList<de.lanrena.jeopardy.view.JsonMessage> = mutableListOf()
+        val initialData: MutableList<JsonMessage<*>> = mutableListOf()
         initialData.addAll(game.players.map(::PlayerEvent))
         initialData.addAll(game.categories.map(::CategoryEvent))
         initialData.addAll(game.fields.map(::FieldEvent))

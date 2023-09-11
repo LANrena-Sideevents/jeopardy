@@ -2,7 +2,7 @@ package de.lanrena.jeopardy.controller
 
 import de.lanrena.jeopardy.model.Game
 import de.lanrena.jeopardy.model.Player
-import de.lanrena.jeopardy.view.stickyevents.PlayerEvent
+import de.lanrena.jeopardy.view.PlayerEvent
 
 class PlayerController(
         val player: Player,

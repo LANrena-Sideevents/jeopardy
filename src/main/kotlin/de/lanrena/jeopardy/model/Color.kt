@@ -1,7 +1,5 @@
 package de.lanrena.jeopardy.model
 
-import java.util.*
-
 /**
  * SNES Color palette according to https://en.wikipedia.org/wiki/List_of_video_game_console_palettes#Super_NES_.28SNES.29
  */
@@ -18,6 +16,6 @@ enum class Color(val value: String) {
     override fun toString(): String = value
 
     companion object {
-        fun randomColor(): Color = values()[Random().nextInt(values().size)]
+        fun randomColor() = entries.random()
     }
 }

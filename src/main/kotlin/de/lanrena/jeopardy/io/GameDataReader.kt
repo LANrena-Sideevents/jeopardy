@@ -3,7 +3,6 @@ package de.lanrena.jeopardy.io
 import de.lanrena.jeopardy.model.Category
 import de.lanrena.jeopardy.model.Field
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry
-import org.apache.commons.compress.archivers.zip.ZipFile
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
@@ -13,6 +12,7 @@ import java.io.InputStreamReader
 import java.io.Reader
 import java.nio.file.Paths
 import java.util.function.Supplier
+import java.util.zip.ZipFile
 
 class GameDataReader(gameDataFile: File) {
     var name: String? = null

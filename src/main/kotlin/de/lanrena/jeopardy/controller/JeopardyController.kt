@@ -1,13 +1,11 @@
 package de.lanrena.jeopardy.controller
 
 import de.lanrena.jeopardy.model.Game
-import de.lanrena.jeopardy.view.stickyevents.GameEvent
-import org.springframework.beans.factory.annotation.Autowired
+import de.lanrena.jeopardy.view.GameEvent
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import java.util.*
 
 class JeopardyController {
-    @Autowired
     private var template: SimpMessagingTemplate? = null
 
     private val games: MutableList<Game> =

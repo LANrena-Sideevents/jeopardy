@@ -1,13 +1,22 @@
 package de.lanrena.jeopardy
 
-import org.springframework.boot.SpringApplication
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration
-import org.springframework.boot.autoconfigure.SpringBootApplication
+import de.lanrena.jeopardy.backend.configureBackend
+import de.lanrena.jeopardy.frontend.configureFrontend
+import freemarker.cache.ClassTemplateLoader
+import io.ktor.server.application.Application
+import io.ktor.server.application.install
+import io.ktor.server.cio.EngineMain
+import io.ktor.server.freemarker.FreeMarker
+import io.ktor.server.webjars.Webjars
 
-@EnableAutoConfiguration
-@SpringBootApplication
-open class Application
+fun main(args: Array<String>): Unit = EngineMain.main(args)
 
-fun main(args: Array<String>) {
-    SpringApplication.run(Application::class.java, *args)
+fun Application.module() {
+    configureDependencyInjection()
+    install(Webjars)
+    install(FreeMarker) {
+        templateLoader = ClassTemplateLoader(this::class.java.classLoader, "templates")
+    }
+    configureBackend()
+    configureFrontend()
 }

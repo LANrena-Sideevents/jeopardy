@@ -1,5 +1,9 @@
 package de.lanrena.jeopardy.view
 
-open class JsonMessage(
-        val type: String,
-        val payload: Any)
+import kotlinx.serialization.Serializable
+
+@Serializable
+sealed interface JsonMessage<T> {
+    val type: String
+    val payload: T
+}

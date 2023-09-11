@@ -1,8 +1,8 @@
 package de.lanrena.jeopardy.controller
 
 import de.lanrena.jeopardy.model.Player
-import de.lanrena.jeopardy.view.dialogevents.ClearOverlayEvent
-import de.lanrena.jeopardy.view.dialogevents.OverlayEvent
+import de.lanrena.jeopardy.view.ClearOverlayEvent
+import de.lanrena.jeopardy.view.OverlayEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.stereotype.Controller
@@ -11,60 +11,20 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import java.util.*
 
-@Controller
-@RequestMapping("/backend")
-@Suppress("unused")
-open class BackendController(
-        @Autowired val template: SimpMessagingTemplate,
-        @Autowired val gameState: JeopardyController) {
 
-    @GetMapping("", "/index")
-    fun index(model: Model): String {
-        model.addAttribute("games", gameState.listGames())
-        return "backend/index"
-    }
-
-    @GetMapping("/game")
-    fun preventStackTrace(): String = "redirect:/backend/index"
-
-    @GetMapping("/game/{gameId}")
-    fun game(@PathVariable("gameId") gameId: UUID?, model: Model): String {
-        val gameController = gameState.getGameController(gameId)
-                ?: return "redirect:/backend/index"
-
-        model.addAttribute("game", gameController.game)
-        model.addAttribute("gamecontroller", gameController)
-
-        return when {
-            gameController.game.dataLoaded -> {
-                gameController.sender.send(ClearOverlayEvent())
-                "backend/game"
-            }
-            else -> "backend/init_game"
-        }
-    }
-
-    @PostMapping("/game/{gameId}/load")
-    fun loadData(@PathVariable("gameId") gameId: UUID,
-                 @RequestParam("game_data") gameData: MultipartFile): String {
-        val gameController = gameState.getGameController(gameId)
-                ?: return "redirect:/backend/index"
-
-        gameController.loadGameData(gameData)
-        return "redirect:/backend/game/$gameId"
-    }
+open class BackendController() {
 
     @GetMapping("/game/{gameId}/player/{playerId}")
     fun editPlayerForm(
-            @PathVariable("gameId") gameId: UUID?,
-            @PathVariable("playerId") playerId: UUID?,
-            model: Model): String {
+        @PathVariable("gameId") gameId: UUID?,
+        @PathVariable("playerId") playerId: UUID?,
+        model: Model): String {
 
         val gameController = gameState.getGameController(gameId)
-                ?: return "redirect:/backend/index"
+            ?: return "redirect:/backend/index"
 
         val playerController = gameController.getPlayerController(playerId)
-                ?: return "redirect:/backend/game/$gameId"
+            ?: return "redirect:/backend/game/$gameId"
 
         model.addAttribute("game", gameController.game)
         model.addAttribute("player", playerController.player)

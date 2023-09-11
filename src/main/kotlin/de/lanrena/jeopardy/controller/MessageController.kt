@@ -1,6 +1,6 @@
 package de.lanrena.jeopardy.controller
 
-import de.lanrena.jeopardy.view.stickyevents.GameEvent
+import de.lanrena.jeopardy.view.GameEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.handler.annotation.DestinationVariable
 import org.springframework.messaging.simp.annotation.SubscribeMapping
