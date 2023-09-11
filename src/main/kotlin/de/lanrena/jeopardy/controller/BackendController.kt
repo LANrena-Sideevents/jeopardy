@@ -1,55 +1,11 @@
 package de.lanrena.jeopardy.controller
 
 import de.lanrena.jeopardy.model.Player
-import de.lanrena.jeopardy.view.ClearOverlayEvent
 import de.lanrena.jeopardy.view.OverlayEvent
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.messaging.simp.SimpMessagingTemplate
-import org.springframework.stereotype.Controller
-import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.*
-import org.springframework.web.multipart.MultipartFile
 import java.util.*
 
 
-open class BackendController() {
-
-    @GetMapping("/game/{gameId}/player/{playerId}")
-    fun editPlayerForm(
-        @PathVariable("gameId") gameId: UUID?,
-        @PathVariable("playerId") playerId: UUID?,
-        model: Model): String {
-
-        val gameController = gameState.getGameController(gameId)
-            ?: return "redirect:/backend/index"
-
-        val playerController = gameController.getPlayerController(playerId)
-            ?: return "redirect:/backend/game/$gameId"
-
-        model.addAttribute("game", gameController.game)
-        model.addAttribute("player", playerController.player)
-        return "backend/editplayer"
-    }
-
-    @PostMapping("/game/{gameId}/player/{playerId}")
-    fun editPlayerAction(
-            @PathVariable("gameId") gameId: UUID?,
-            @PathVariable("playerId") playerId: UUID?,
-            @RequestParam("player_name") player_name: String,
-            @RequestParam("player_color") player_color: String,
-            @RequestParam("player_points") player_points: String,
-            model: Model): String {
-
-        val gameController = gameState.getGameController(gameId)
-                ?: return "redirect:/backend/index"
-
-        val playerController = gameController.getPlayerController(playerId)
-                ?: return "redirect:/backend/game/$gameId/player/$playerId"
-
-        playerController.updatePlayer(player_name, player_color, player_points.toInt())
-        model.addAttribute("game", gameController.game)
-        return "redirect:/backend/game/$gameId/players"
-    }
+class BackendController() {
 
     @PostMapping("/game/{gameId}/players")
     fun addPlayer(@PathVariable("gameId") gameId: UUID,

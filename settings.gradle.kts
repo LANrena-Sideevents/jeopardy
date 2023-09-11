@@ -101,6 +101,12 @@ dependencyResolutionManagement {
             ).versionRef("ktor")
 
             library(
+                "ktor-server-websockets",
+                "io.ktor",
+                "ktor-server-websockets"
+            ).versionRef("ktor")
+
+            library(
                 "ktor-server-freemarker",
                 "io.ktor",
                 "ktor-server-freemarker"
@@ -116,6 +122,7 @@ dependencyResolutionManagement {
                     "ktor-server-freemarker",
                     "ktor-server-sessions",
                     "ktor-server-webjars",
+                    "ktor-server-websockets",
                     "ktor-serialization-kotlinx-json",
                     "ktor-client-cio",
                     "ktor-client-content-negotiation"

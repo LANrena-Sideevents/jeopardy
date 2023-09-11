@@ -1,5 +1,5 @@
 package de.lanrena.jeopardy.controller
 
 interface TopicSender {
-    fun send(message: Any): Unit?
+    suspend fun send(message: Any)
 }

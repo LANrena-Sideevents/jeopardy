@@ -22,7 +22,7 @@ class GameDataReader(gameDataFile: File) {
     val resources: MutableMap<String, Supplier<InputStream>> = mutableMapOf()
 
     init {
-        val archiveFile: ZipFile = ZipFile(gameDataFile)
+        val archiveFile = ZipFile(gameDataFile)
         archiveFile.entries.toList().forEach {
             zipEntry: ZipArchiveEntry ->
             if (zipEntry.name.endsWith(".json", true)) {

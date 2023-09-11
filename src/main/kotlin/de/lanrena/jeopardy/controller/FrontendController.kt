@@ -1,18 +1,11 @@
 package de.lanrena.jeopardy.controller
 
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Controller
-import org.springframework.util.StreamUtils
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
 import java.io.InputStream
 import java.util.*
-import javax.servlet.http.HttpServletResponse
 
-@Controller
 @Suppress("unused")
 open class FrontendController(
-        @Autowired val gameState: JeopardyController) {
+        private val gameState: JeopardyController) {
 
     @RequestMapping(path = ["/", "frontend/index"])
     fun index(): String {

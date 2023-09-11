@@ -14,16 +14,17 @@ import java.io.InputStream
 import java.util.*
 
 class GameController(
-        val game: Game,
-        val sender: TopicSender) {
+    val game: Game,
+    val sender: TopicSender
+) {
 
-    fun addPlayer(name: String) {
+    suspend fun addPlayer(name: String) {
         val player = Player(name = name)
         game.players.add(player)
         sender.send(PlayerEvent(player))
     }
 
-    fun loadGameData(gameDataStream: InputStream) {
+    suspend fun loadGameData(gameDataStream: InputStream) {
         val tempFile = File.createTempFile(game.id.toString(), null)
         gameDataStream.transferTo(FileOutputStream(tempFile))
         tempFile.deleteOnExit()
@@ -58,8 +59,11 @@ class GameController(
         return PlayerController(player, game, sender)
     }
 
-    fun resolveResource(resId: String): InputStream? =
-            game.resources.filterKeys {
-                it.startsWith(resId)
-            }.entries.first().value.get()
+    fun resolveResource(resId: String): InputStream =
+        game.resources
+            .filterKeys { it.startsWith(resId) }
+            .entries
+            .first()
+            .value
+            .get()
 }

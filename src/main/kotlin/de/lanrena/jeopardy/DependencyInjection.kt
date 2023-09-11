@@ -19,7 +19,6 @@ internal fun Application.configureDependencyInjection() {
             module {
                 single { this@configureDependencyInjection }
                 single { log }
-                single { environment.config }
             },
 
             module {
