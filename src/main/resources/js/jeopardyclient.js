@@ -107,10 +107,9 @@ document.addEventListener("DOMContentLoaded", function () {
         //noinspection JSUnusedGlobalSymbols
         this.selectGame = function () {
             Jeopardy.SelectedGame(this);
-            //window.stomp.unsubscribe('/topic/games');
             socket.send(JSON.stringify({
                 type: "RequestGameState",
-                "gameId": Jeopardy.SelectedGame().id()
+                "gameId": id()
             }))
         };
 
