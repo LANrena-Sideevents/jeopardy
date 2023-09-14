@@ -5,7 +5,7 @@ import de.lanrena.jeopardy.model.Player
 import de.lanrena.jeopardy.view.FieldEvent
 
 class FieldController(val field: Field,
-                      private val sender: TopicSender) {
+                      private val sender: MessageSender) {
     suspend fun markDone(player: Player?) {
         field.player = player
         field.done = true

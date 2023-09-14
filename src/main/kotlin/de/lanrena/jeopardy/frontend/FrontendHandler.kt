@@ -1,42 +1,72 @@
 package de.lanrena.jeopardy.frontend
 
+import de.lanrena.jeopardy.controller.JeopardyController
 import de.lanrena.jeopardy.io.WebSocketConnectionManager
-import io.ktor.serialization.kotlinx.KotlinxWebsocketSerializationConverter
-import io.ktor.server.application.Application
+import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
-import io.ktor.server.application.install
 import io.ktor.server.freemarker.FreeMarkerContent
 import io.ktor.server.response.respond
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
-import io.ktor.server.routing.routing
-import io.ktor.server.websocket.WebSockets
+import io.ktor.server.util.getOrFail
 import io.ktor.server.websocket.webSocket
-import kotlinx.serialization.json.Json
+import io.ktor.websocket.Frame
+import io.ktor.websocket.FrameType
+import io.ktor.websocket.readText
 import org.koin.ktor.ext.inject
+import java.util.*
 
-
-fun Application.configureFrontend() {
-    install(WebSockets) {
-        contentConverter = KotlinxWebsocketSerializationConverter(Json)
+fun Routing.configureFrontend() {
+    get("") {
+        call.respond(FreeMarkerContent("frontend/index.ftl", emptyMap<String, String>()))
     }
 
-    routing {
-        get("") {
-            call.respond(FreeMarkerContent("frontend/index.ftl", emptyMap<String, String>()))
+    val jeopardyController by inject<JeopardyController>()
+    with(jeopardyController) {
+        configureResourceRoute()
+    }
+
+    val webSocketConnectionManager by inject<WebSocketConnectionManager>()
+    with(webSocketConnectionManager) {
+        configureWebsocket()
+    }
+}
+
+context(JeopardyController)
+fun Route.configureResourceRoute() {
+    get("/resource/{gameId}/{resId}") {
+        val gameId = call.parameters.getOrFail<UUID>("gameId")
+        val gameController = getGameController(gameId)
+        if (gameController == null) {
+            call.respond(HttpStatusCode.NotFound)
+            return@get
         }
 
-        val webSocketConnectionManager by inject<WebSocketConnectionManager>()
-        webSocket("/jeopardy") {
-            webSocketConnectionManager.addConnection(this)
-            try {
-                for (frame in incoming) {
-                    println(frame)
+        val resId = call.parameters.getOrFail("resId")
+        val res = gameController.resolveResource(resId)
+        TODO("implement me")
+//        call.respondOutputStream()
+//        val size = StreamUtils.copy(res, response.outputStream).toLong()
+//        response.setContentLengthLong(size)
+    }
+}
+
+context(WebSocketConnectionManager)
+fun Route.configureWebsocket() {
+    webSocket("/jeopardy") {
+        addConnection(this)
+        try {
+            for (frame in incoming) {
+                when (frame.frameType) {
+                    FrameType.TEXT -> receive((frame as Frame.Text).readText())
+                    else -> continue
                 }
-            } catch (e: Exception) {
-                println(e.localizedMessage)
-            } finally {
-                webSocketConnectionManager.removeConnection(this)
             }
+        } catch (e: Exception) {
+            println(e.localizedMessage)
+        } finally {
+            removeConnection(this)
         }
     }
 }

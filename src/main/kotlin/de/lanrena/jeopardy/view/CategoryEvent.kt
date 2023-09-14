@@ -4,8 +4,8 @@ import de.lanrena.jeopardy.model.Category
 import kotlinx.serialization.Serializable
 
 @Serializable
-class CategoryEvent(
-    override val payload: Category
-) : JsonMessage<Category> {
+data class CategoryEvent(
+    val payload: Category
+) : JsonMessage {
     override val type = "CategoryEvent"
 }

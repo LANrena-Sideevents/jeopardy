@@ -6,16 +6,15 @@ import de.lanrena.jeopardy.model.Player
 import de.lanrena.jeopardy.view.CategoryEvent
 import de.lanrena.jeopardy.view.CombinedEvent
 import de.lanrena.jeopardy.view.FieldEvent
-import de.lanrena.jeopardy.view.JsonMessage
 import de.lanrena.jeopardy.view.PlayerEvent
-import java.io.File
-import java.io.FileOutputStream
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.InputStream
 import java.util.*
 
 class GameController(
     val game: Game,
-    val sender: TopicSender
+    val sender: MessageSender
 ) {
 
     suspend fun addPlayer(name: String) {
@@ -25,25 +24,24 @@ class GameController(
     }
 
     suspend fun loadGameData(gameDataStream: InputStream) {
-        val tempFile = File.createTempFile(game.id.toString(), null)
-        gameDataStream.transferTo(FileOutputStream(tempFile))
-        tempFile.deleteOnExit()
-
-        val gameDataReader = GameDataReader(tempFile)
-        game.categories.addAll(gameDataReader.categories)
-        game.fields.addAll(gameDataReader.fields)
-        game.resources.putAll(gameDataReader.resources)
-        game.dataLoaded = true
+        withContext(Dispatchers.IO) {
+            val gameDataReader = GameDataReader(gameDataStream)
+            game.categories.addAll(gameDataReader.categories)
+            game.fields.addAll(gameDataReader.fields)
+            game.resources.putAll(gameDataReader.resources)
+            game.dataLoaded = true
+        }
 
         sender.send(getCombinedState())
     }
 
     fun getCombinedState(): CombinedEvent {
-        val initialData: MutableList<JsonMessage<*>> = mutableListOf()
-        initialData.addAll(game.players.map(::PlayerEvent))
-        initialData.addAll(game.categories.map(::CategoryEvent))
-        initialData.addAll(game.fields.map(::FieldEvent))
-        return CombinedEvent(initialData)
+        val initialData = listOf(
+            game.players.map(::PlayerEvent),
+            game.categories.map(::CategoryEvent),
+            game.fields.map(::FieldEvent)
+        )
+        return CombinedEvent(initialData.flatten())
     }
 
     fun getFieldController(col: Int?, row: Int?): FieldController? {

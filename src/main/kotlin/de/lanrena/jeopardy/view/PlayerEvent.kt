@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PlayerEvent(
-    override val payload: Player
-) : JsonMessage<Player> {
+    val payload: Player
+) : JsonMessage {
     override val type = "PlayerEvent"
 }

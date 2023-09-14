@@ -7,7 +7,7 @@ import de.lanrena.jeopardy.view.PlayerEvent
 class PlayerController(
         val player: Player,
         val game: Game,
-        val sender: TopicSender) {
+        val sender: MessageSender) {
 
     suspend fun updatePlayer(name: String = player.name,
                      color: String = player.color,

@@ -5,9 +5,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class OverlayEvent(
-    override val payload: String
-) : JsonMessage<String> {
-    constructor(field: Field): this(payload = field.question)
+    val question: String
+): JsonMessage {
+    constructor(field: Field): this(field.question)
 
     override val type = "OverlayEvent"
 }

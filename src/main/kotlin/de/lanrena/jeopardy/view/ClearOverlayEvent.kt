@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ClearOverlayEvent(
-    override val payload: String = ""
-) : JsonMessage<String> {
+    val payload: String = ""
+) : JsonMessage {
     override val type = "ClearOverlayEvent"
 }

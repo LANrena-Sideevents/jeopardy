@@ -2,7 +2,9 @@ package de.lanrena.jeopardy
 
 import de.lanrena.jeopardy.backend.backendModule
 import de.lanrena.jeopardy.controller.JeopardyController
+import de.lanrena.jeopardy.controller.MessageController
 import de.lanrena.jeopardy.frontend.frontendModule
+import de.lanrena.jeopardy.io.WebSocketConnectionManager
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.application.log
@@ -23,6 +25,8 @@ internal fun Application.configureDependencyInjection() {
 
             module {
                 singleOf(::JeopardyController)
+                singleOf(::WebSocketConnectionManager)
+                singleOf(::MessageController) { createEagerInstances() }
             },
 
             backendModule(),

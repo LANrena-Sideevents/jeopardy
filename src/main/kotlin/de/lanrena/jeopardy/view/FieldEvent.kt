@@ -11,9 +11,9 @@ data class SimplifiedField(
 )
 
 @Serializable
-class FieldEvent(
-    override val payload: SimplifiedField
-) : JsonMessage<SimplifiedField> {
+data class FieldEvent(
+    val payload: SimplifiedField
+) : JsonMessage {
     constructor(field: Field) : this(
         payload = SimplifiedField(
             col = field.col,
