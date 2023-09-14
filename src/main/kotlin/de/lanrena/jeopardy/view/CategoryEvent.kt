@@ -6,6 +6,4 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CategoryEvent(
     val payload: Category
-) : JsonMessage {
-    override val type = "CategoryEvent"
-}
+) : JsonMessage

@@ -15,6 +15,4 @@ data class GameEvent(
     val payload: List<SimplifiedGame>
 ) : JsonMessage {
     constructor(vararg listGames: Game) : this(payload = listGames.toList().map { SimplifiedGame(it.id) })
-
-    override val type = "GameEvent"
 }

@@ -4,6 +4,7 @@ import de.lanrena.jeopardy.controller.MessageHandler
 import de.lanrena.jeopardy.controller.MessageSender
 import de.lanrena.jeopardy.view.JsonMessage
 import de.lanrena.jeopardy.view.RequestGameList
+import de.lanrena.jeopardy.view.RequestGameState
 import io.ktor.server.websocket.WebSocketServerSession
 import io.ktor.server.websocket.sendSerialized
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -46,6 +47,7 @@ class WebSocketConnectionManager : MessageSender {
         serializersModule = SerializersModule {
             polymorphic(JsonMessage::class) {
                 subclass(RequestGameList::class)
+                subclass(RequestGameState::class)
             }
         }
     }

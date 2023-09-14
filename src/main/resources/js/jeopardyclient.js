@@ -1,20 +1,11 @@
 let Jeopardy = {};
 
 document.addEventListener("DOMContentLoaded", function () {
-    let TOPIC_PREFIX = '/topic';
-
-    let appAdr = window.location.host || "[::1]:8080";
-    window.stomp = Stomp.over(new SockJS('http://' + appAdr + '/jeopardy'));
-    window.stomp.clientId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        let r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
-
-    const handleGameAction = function (message, client) {
+    const handleGameAction = function (message) {
         switch (message['type']) {
             case "CombinedEvent":
                 for (let event of message['payload'])
-                    handleGameAction(event, client);
+                    handleGameAction(event);
                 break;
 
             case "PlayerEvent":
@@ -34,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
             case "FieldEvent":
                 let field = document.getElementById('row' + message['payload']['row'] + 'col' + message['payload']['col']);
                 if (message['payload']['disabled'])
-                field.className += "disabled";
+                    field.className += "disabled";
                 break;
 
             case "OverlayEvent":
@@ -116,10 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
         //noinspection JSUnusedGlobalSymbols
         this.selectGame = function () {
             Jeopardy.SelectedGame(this);
-            window.stomp.unsubscribe('/topic/games');
-            window.stomp.subscribe('/topic/game/' + this.id(), function (message) {
-                handleGameAction(JSON.parse(message.body), window.stomp);
-            });
+            //window.stomp.unsubscribe('/topic/games');
         };
 
         this.update = updateFunc;
@@ -175,14 +163,28 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 
-    window.stomp.connect({}, function () {
-        ko.applyBindings(Jeopardy);
 
-        window.stomp.subscribe(TOPIC_PREFIX + '/games', function (game_result) {
-            for (let game of JSON.parse(game_result.body)['payload']) {
+    let appAdr = "ws://" + (window.location.host || "[::1]:8080") + "/jeopardy";
+    const socket = new WebSocket(appAdr);
+
+    socket.addEventListener("message", (event) => {
+        console.log("Message from server ", event.data);
+
+        if (event.data['type'] === "GameEvent") {
+            for (let game of JSON.parse(event.data)['payload']) {
                 let item = new Jeopardy.Game(game.id);
                 addIfNotExists(Jeopardy.Games, item);
             }
+        } else {
+            handleGameAction(JSON.parse(event.data));
+        }
+    });
+
+    socket.addEventListener("open", () => {
+        ko.applyBindings(Jeopardy);
+
+        socket.send({
+            type: "RequestGameList"
         });
 
         Jeopardy.Message("Connected");

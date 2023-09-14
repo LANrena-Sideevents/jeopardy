@@ -21,6 +21,4 @@ data class FieldEvent(
             disabled = field.done
         )
     )
-
-    override val type = "FieldEvent"
 }

@@ -8,6 +8,4 @@ data class OverlayEvent(
     val question: String
 ): JsonMessage {
     constructor(field: Field): this(field.question)
-
-    override val type = "OverlayEvent"
 }
