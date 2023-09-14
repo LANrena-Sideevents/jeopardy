@@ -1,6 +1,7 @@
 package de.lanrena.jeopardy.view
 
 import de.lanrena.jeopardy.model.Field
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -11,6 +12,7 @@ data class SimplifiedField(
 )
 
 @Serializable
+@SerialName("FieldEvent")
 data class FieldEvent(
     val payload: SimplifiedField
 ) : JsonMessage {

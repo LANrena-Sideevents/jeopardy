@@ -30,6 +30,9 @@ dependencies {
     implementation("org.webjars:jquery:3.6.0")
     implementation("org.webjars:tether:1.4.0")
     implementation("org.webjars:bootstrap:5.1.1")
+
+    testImplementation(platform("org.junit:junit-bom:${libs.versions.junit.get()}"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
 tasks.withType<KotlinCompile>().configureEach {
@@ -37,6 +40,10 @@ tasks.withType<KotlinCompile>().configureEach {
         languageVersion = "2.0"
         freeCompilerArgs = freeCompilerArgs + "-Xcontext-receivers"
     }
+}
+
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
 }
 
 extensions.configure<KotlinTopLevelExtension> {

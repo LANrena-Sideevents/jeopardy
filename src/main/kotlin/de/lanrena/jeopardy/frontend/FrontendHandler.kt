@@ -2,6 +2,7 @@ package de.lanrena.jeopardy.frontend
 
 import de.lanrena.jeopardy.controller.JeopardyController
 import de.lanrena.jeopardy.io.WebSocketConnectionManager
+import de.lanrena.jeopardy.view.RequestGameList
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
 import io.ktor.server.http.content.staticResources
@@ -11,6 +12,7 @@ import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
 import io.ktor.server.thymeleaf.ThymeleafContent
 import io.ktor.server.util.getOrFail
+import io.ktor.server.websocket.sendSerialized
 import io.ktor.server.websocket.webSocket
 import io.ktor.websocket.Frame
 import io.ktor.websocket.FrameType

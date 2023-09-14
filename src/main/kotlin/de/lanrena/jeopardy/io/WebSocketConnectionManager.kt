@@ -7,6 +7,7 @@ import de.lanrena.jeopardy.view.RequestGameList
 import de.lanrena.jeopardy.view.RequestGameState
 import io.ktor.server.websocket.WebSocketServerSession
 import io.ktor.server.websocket.sendSerialized
+import io.ktor.websocket.send
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.serialization.json.Json
@@ -39,7 +40,7 @@ class WebSocketConnectionManager : MessageSender {
 
     override suspend fun send(message: JsonMessage) {
         connections.value.forEach {
-            it?.session?.sendSerialized(message)
+            it?.session?.send(json.encodeToString(JsonMessage.serializer(), message))
         }
     }
 

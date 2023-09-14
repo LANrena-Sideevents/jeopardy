@@ -11,9 +11,9 @@
 </head>
 <body>
 
-<div id="waitingroom" data-bind="ifnot: SelectedGame">
-    <h2 id="message" data-bind="text: Message"></h2>
-    <ul id="gamelist" data-bind="foreach: Games">
+<div id="waitingroom" data-bind="ifnot: Jeopardy.SelectedGame">
+    <h2 id="message" data-bind="text: Jeopardy.Message"></h2>
+    <ul id="gamelist" data-bind="foreach: Jeopardy.Games">
         <li data-bind="text: id, click: selectGame"></li>
     </ul>
 </div>

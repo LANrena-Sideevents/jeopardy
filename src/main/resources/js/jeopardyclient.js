@@ -108,6 +108,10 @@ document.addEventListener("DOMContentLoaded", function () {
         this.selectGame = function () {
             Jeopardy.SelectedGame(this);
             //window.stomp.unsubscribe('/topic/games');
+            socket.send(JSON.stringify({
+                type: "RequestGameState",
+                "gameId": Jeopardy.SelectedGame().id()
+            }))
         };
 
         this.update = updateFunc;
@@ -170,12 +174,13 @@ document.addEventListener("DOMContentLoaded", function () {
     socket.addEventListener("message", (event) => {
         console.log("Message from server ", event.data);
 
-        if (event.data['type'] === "GameEvent") {
-            for (let game of JSON.parse(event.data)['payload']) {
+        let parsedEvent = JSON.parse(event.data);
+        if (parsedEvent['type'] === "GameEvent") {
+            for (let game of parsedEvent['games']) {
                 let item = new Jeopardy.Game(game.id);
                 addIfNotExists(Jeopardy.Games, item);
             }
-        } else {
+        } else if (Jeopardy.SelectedGame) {
             handleGameAction(JSON.parse(event.data));
         }
     });

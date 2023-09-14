@@ -2,6 +2,7 @@ package de.lanrena.jeopardy.view
 
 import de.lanrena.jeopardy.model.Game
 import de.lanrena.jeopardy.model.UuidSerializer
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.util.*
 
@@ -11,8 +12,9 @@ class SimplifiedGame(
 )
 
 @Serializable
+@SerialName("GameEvent")
 data class GameEvent(
-    val payload: List<SimplifiedGame>
+    val games: List<SimplifiedGame>
 ) : JsonMessage {
-    constructor(vararg listGames: Game) : this(payload = listGames.toList().map { SimplifiedGame(it.id) })
+    constructor(vararg listGames: Game) : this(games = listGames.toList().map { SimplifiedGame(it.id) })
 }
