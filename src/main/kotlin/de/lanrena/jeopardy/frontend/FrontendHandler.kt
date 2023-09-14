@@ -5,6 +5,8 @@ import de.lanrena.jeopardy.io.WebSocketConnectionManager
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
 import io.ktor.server.freemarker.FreeMarkerContent
+import io.ktor.server.http.content.staticFiles
+import io.ktor.server.http.content.staticResources
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.Routing
@@ -18,6 +20,10 @@ import org.koin.ktor.ext.inject
 import java.util.*
 
 fun Routing.configureFrontend() {
+    staticResources("/css", "css")
+    staticResources("/js", "js")
+    staticResources("/fonts", "fonts")
+
     get("") {
         call.respond(FreeMarkerContent("frontend/index.ftl", emptyMap<String, String>()))
     }
