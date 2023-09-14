@@ -3,10 +3,13 @@ package de.lanrena.jeopardy.backend
 import de.lanrena.jeopardy.controller.JeopardyController
 import de.lanrena.jeopardy.view.ClearOverlayEvent
 import de.lanrena.jeopardy.view.OverlayEvent
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.PartData
 import io.ktor.http.content.streamProvider
 import io.ktor.server.application.call
+import io.ktor.server.request.ContentTransformationException
 import io.ktor.server.request.receiveMultipart
+import io.ktor.server.request.receiveParameters
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondRedirect
 import io.ktor.server.routing.Route
@@ -160,7 +163,14 @@ fun Route.addPlayer() {
             return@post
         }
 
-        val playerName = call.parameters.getOrFail("player_name")
+        val formParameters = try {
+            call.receiveParameters()
+        } catch (ex: ContentTransformationException) {
+            call.respond<String>(HttpStatusCode.BadRequest, "Error: Missing form-encoded parameters")
+            return@post
+        }
+
+        val playerName = formParameters.getOrFail("player_name")
 
         gameController.addPlayer(playerName)
         call.respondRedirect("/backend/game/$gameId/players")
