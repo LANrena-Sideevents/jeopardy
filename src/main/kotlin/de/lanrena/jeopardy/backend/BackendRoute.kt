@@ -46,7 +46,8 @@ fun Routing.configureBackend() {
 
 context(JeopardyController)
 fun Route.configureGameOverview() {
-    get("") {
+    get("") { call.respondRedirect("backend/") }
+    get("/") {
         val listGames = listGames()
         call.respond(ThymeleafContent("backend/index.html", mapOf("games" to listGames)))
     }
