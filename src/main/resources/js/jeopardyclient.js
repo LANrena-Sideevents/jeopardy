@@ -183,9 +183,9 @@ document.addEventListener("DOMContentLoaded", function () {
     socket.addEventListener("open", () => {
         ko.applyBindings(Jeopardy);
 
-        socket.send({
+        socket.send(JSON.stringify({
             type: "RequestGameList"
-        });
+        }));
 
         Jeopardy.Message("Connected");
     });
