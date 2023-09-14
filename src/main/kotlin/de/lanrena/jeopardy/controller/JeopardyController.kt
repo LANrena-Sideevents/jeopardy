@@ -12,7 +12,7 @@ class JeopardyController(
     private val games: MutableList<Game> =
             Collections.synchronizedList(mutableListOf())
 
-    suspend fun createGame() {
+    suspend fun createNewGame() {
         val element = Game()
         games.add(element)
         connectionManager.send(GameEvent(element))

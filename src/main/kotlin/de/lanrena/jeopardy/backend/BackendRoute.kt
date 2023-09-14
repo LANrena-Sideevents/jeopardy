@@ -33,6 +33,7 @@ fun Routing.configureBackend() {
             listPlayers()
             overlayEvent()
             postAnswer()
+            createGame()
         }
         get("/game") {
             call.respondRedirect("/backend")
@@ -43,7 +44,8 @@ fun Routing.configureBackend() {
 context(JeopardyController)
 fun Route.configureGameOverview() {
     get("") {
-        call.respond(ThymeleafContent("backend/index.html", mapOf("games" to listGames())))
+        val listGames = listGames()
+        call.respond(ThymeleafContent("backend/index.html", mapOf("games" to listGames)))
     }
 }
 
@@ -266,7 +268,7 @@ fun Route.postAnswer() {
 context(JeopardyController)
 fun Route.createGame() {
     post("/game") {
-        this@createGame.createGame()
+        createNewGame()
         call.respondRedirect("/backend")
     }
 }
