@@ -5,9 +5,7 @@ import de.lanrena.jeopardy.view.ClearOverlayEvent
 import de.lanrena.jeopardy.view.OverlayEvent
 import io.ktor.http.content.PartData
 import io.ktor.http.content.streamProvider
-import io.ktor.server.application.Application
 import io.ktor.server.application.call
-import io.ktor.server.freemarker.FreeMarkerContent
 import io.ktor.server.request.receiveMultipart
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondRedirect
@@ -16,7 +14,7 @@ import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
-import io.ktor.server.routing.routing
+import io.ktor.server.thymeleaf.ThymeleafContent
 import io.ktor.server.util.getOrFail
 import org.koin.ktor.ext.inject
 import java.util.*
@@ -45,7 +43,7 @@ fun Routing.configureBackend() {
 context(JeopardyController)
 fun Route.configureGameOverview() {
     get("") {
-        call.respond(FreeMarkerContent("backend/index.ftl", mapOf("games" to listGames())))
+        call.respond(ThymeleafContent("backend/index.html", mapOf("games" to listGames())))
     }
 }
 
@@ -67,11 +65,11 @@ fun Route.getGameData() {
         when {
             gameController.game.dataLoaded -> {
                 gameController.sender.send(ClearOverlayEvent())
-                call.respond(FreeMarkerContent("backend/game.ftl", data))
+                call.respond(ThymeleafContent("backend/game.html", data))
             }
 
             else -> {
-                call.respond(FreeMarkerContent("backend/init_game.ftl", data))
+                call.respond(ThymeleafContent("backend/init_game.html", data))
             }
         }
     }
@@ -114,8 +112,8 @@ fun Route.playerInfoPage() {
         }
 
         call.respond(
-            FreeMarkerContent(
-                "backend/init_game.ftl", mapOf(
+            ThymeleafContent(
+                "backend/init_game.html", mapOf(
                     "game" to gameController.game,
                     "player" to playerController.player
                 )
@@ -178,8 +176,8 @@ fun Route.listPlayers() {
         }
 
         call.respond(
-            FreeMarkerContent(
-                "backend/players.ftl", mapOf(
+            ThymeleafContent(
+                "backend/players.html", mapOf(
                     "game" to gameController.game,
                 )
             )
@@ -208,8 +206,8 @@ fun Route.overlayEvent() {
 
         gameController.sender.send(OverlayEvent(fieldController.field))
         call.respond(
-            FreeMarkerContent(
-                "backend/field.ftl", mapOf(
+            ThymeleafContent(
+                "backend/field.html", mapOf(
                     "game" to gameController.game,
                     "field" to fieldController.field,
                 )

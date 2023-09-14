@@ -4,13 +4,12 @@ import de.lanrena.jeopardy.controller.JeopardyController
 import de.lanrena.jeopardy.io.WebSocketConnectionManager
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
-import io.ktor.server.freemarker.FreeMarkerContent
-import io.ktor.server.http.content.staticFiles
 import io.ktor.server.http.content.staticResources
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
+import io.ktor.server.thymeleaf.ThymeleafContent
 import io.ktor.server.util.getOrFail
 import io.ktor.server.websocket.webSocket
 import io.ktor.websocket.Frame
@@ -25,7 +24,7 @@ fun Routing.configureFrontend() {
     staticResources("/fonts", "fonts")
 
     get("") {
-        call.respond(FreeMarkerContent("frontend/index.ftl", emptyMap<String, String>()))
+        call.respond(ThymeleafContent("frontend/index.html", emptyMap<String, String>()))
     }
 
     val jeopardyController by inject<JeopardyController>()

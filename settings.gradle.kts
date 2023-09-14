@@ -107,9 +107,9 @@ dependencyResolutionManagement {
             ).versionRef("ktor")
 
             library(
-                "ktor-server-freemarker",
+                "ktor-server-thymeleaf",
                 "io.ktor",
-                "ktor-server-freemarker"
+                "ktor-server-thymeleaf"
             ).versionRef("ktor")
 
             bundle(
@@ -119,8 +119,8 @@ dependencyResolutionManagement {
                     "ktor-server-cio",
                     "ktor-server-content-negotiation",
                     "ktor-server-core",
-                    "ktor-server-freemarker",
                     "ktor-server-sessions",
+                    "ktor-server-thymeleaf",
                     "ktor-server-webjars",
                     "ktor-server-websockets",
                     "ktor-serialization-kotlinx-json",

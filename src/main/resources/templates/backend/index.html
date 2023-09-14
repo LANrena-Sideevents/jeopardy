@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+    <script src="/webjars/tether/1.4.0/js/tether.min.js"></script>
+    <script src="/webjars/bootstrap/5.1.1/js/bootstrap.min.js" defer="defer"></script>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.1.1/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/backend.css"/>
+</head>
+<body>
+
+<div th:replace="backend/fragments/navigation :: navigation"></div>
+
+<div class="container">
+    <ol class="breadcrumb">
+        <li class="active">Jeopardy</li>
+    </ol>
+
+    <div class="list-group">
+        <a th:each="game : ${games}"
+           class="list-group-item list-group-item-action"
+           th:text="${game.id}"
+           th:href="@{|/backend/game/${game.id}|}"/>
+    </div>
+
+    <form action="/backend/game" method="post">
+        <input type="submit" value="Create Game"/>
+    </form>
+</div>
+</body>
+</html>
