@@ -27,7 +27,7 @@
 <div class="container">
     <ol class="breadcrumb">
         <li><a th:href="@{|~/backend|}">Jeopardy</a></li>
-        <li class="active" th:text="${id}"></li>
+        <li class="active" th:text="${game.id}"></li>
     </ol>
 
     <div class="panel panel-default">
@@ -41,7 +41,7 @@
             </thead>
             <tr th:each="i : ${#numbers.sequence(1, 5)}">
                 <td th:each="j : ${#numbers.sequence(1, 5)}">
-                    <a th:href="@{|~/backend/game/${id}/field/${j}/${i}|}"
+                    <a th:href="@{|~/backend/game/${game.id}/field/${j}/${i}|}"
                        th:text="${ i*100 }" th:unless="${gamecontroller.getFieldController(j, i).field.done}"/>
                     <span th:text="${ i*100 }" th:if="${gamecontroller.getFieldController(j, i).field.done}"
                           th:remove="tag"/>
