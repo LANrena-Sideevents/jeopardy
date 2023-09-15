@@ -7,6 +7,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
 import io.ktor.server.http.content.staticResources
 import io.ktor.server.response.respond
+import io.ktor.server.response.respondOutputStream
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.get
@@ -52,10 +53,7 @@ fun Route.configureResourceRoute() {
 
         val resId = call.parameters.getOrFail("resId")
         val res = gameController.resolveResource(resId)
-        TODO("implement me")
-//        call.respondOutputStream()
-//        val size = StreamUtils.copy(res, response.outputStream).toLong()
-//        response.setContentLengthLong(size)
+        call.respondOutputStream { res.transferTo(this) }
     }
 }
 
