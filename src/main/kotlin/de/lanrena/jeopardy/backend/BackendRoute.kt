@@ -242,15 +242,22 @@ fun Route.postAnswer() {
         val col = call.parameters.getOrFail<Int>("col")
         val row = call.parameters.getOrFail<Int>("row")
 
-        val playerId = call.parameters.getOrFail<UUID>("playerId")
+        val formParameters = try {
+            call.receiveParameters()
+        } catch (ex: ContentTransformationException) {
+            call.respond<String>(HttpStatusCode.BadRequest, "Error: Missing form-encoded parameters")
+            return@post
+        }
+
+        val playerId = formParameters.getOrFail<UUID>("playerId")
         val playerController = gameController.getPlayerController(playerId)
         if (playerController == null) {
             call.respondRedirect("/backend/game/$gameId")
             return@post
         }
 
-        val points = call.parameters.getOrFail<Int>("points")
-        val answer = call.parameters.getOrFail("answer")
+        val points = formParameters.getOrFail<Int>("points")
+        val answer = formParameters.getOrFail("answer")
 
         var pointsChange = points
         if (answer == "Wrong") {

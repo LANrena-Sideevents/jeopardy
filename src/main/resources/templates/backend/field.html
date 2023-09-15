@@ -37,10 +37,10 @@
         <div class="form-group">
             <div class="btn-group btn-group-lg" data-toggle="buttons">
                 <label class="btn btn-primary btn-warning active">
-                    <input type="radio" name="player" value="" autocomplete="off" checked="checked"/>None
+                    <input type="radio" name="playerId" value="" autocomplete="off" checked="checked"/>None
                 </label>
                 <label class="btn btn-primary" th:each="player : ${game.players}">
-                    <input type="radio" name="player" th:value="${player.id}" autocomplete="off"/>
+                    <input type="radio" name="playerId" th:value="${player.id}" autocomplete="off"/>
                     <span th:text="${player.name}" th:remove="tag"/>
                 </label>
             </div>
