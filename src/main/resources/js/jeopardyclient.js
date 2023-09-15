@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
             Jeopardy.SelectedGame(this);
             socket.send(JSON.stringify({
                 type: "RequestGameState",
-                "gameId": id()
+                "gameId": id
             }))
         };
 
