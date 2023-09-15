@@ -179,8 +179,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 let item = new Jeopardy.Game(game.id);
                 addIfNotExists(Jeopardy.Games, item);
             }
-        } else if (Jeopardy.SelectedGame) {
-            Jeopardy.SelectedGame().handleGameAction(JSON.parse(event.data));
+        } else{
+            let game = Jeopardy.SelectedGame()
+            if (game) {
+                game.handleGameAction(JSON.parse(event.data));
+            }
         }
     });
 
