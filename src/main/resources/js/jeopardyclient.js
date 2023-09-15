@@ -1,54 +1,6 @@
 let Jeopardy = {};
 
 document.addEventListener("DOMContentLoaded", function () {
-    const handleGameAction = function (message) {
-        switch (message['type']) {
-            case "CombinedEvent":
-                for (let event of message['payload'])
-                    handleGameAction(event);
-                break;
-
-            case "PlayerEvent":
-                Jeopardy.SelectedGame().addPlayer(
-                    new Jeopardy.Player(
-                        message['payload'].id,
-                        message['payload'].name,
-                        message['payload'].color,
-                        message['payload'].points));
-                break;
-
-            case "CategoryEvent":
-                let colProperty = 'col' + message['payload']['column'];
-                Jeopardy.SelectedGame().Categories[colProperty](message['payload'].label);
-                break;
-
-            case "FieldEvent":
-                let field = document.getElementById('row' + message['payload']['row'] + 'col' + message['payload']['col']);
-                if (message['payload']['disabled'])
-                    field.className += "disabled";
-                break;
-
-            case "OverlayEvent":
-                let payload = message['question'];
-                if (payload.startsWith("image:")) {
-                    Jeopardy.Overlay.image("/resource/" + Jeopardy.SelectedGame().id() + "/" + payload.substr(6));
-                } else if (payload.startsWith("audio:")) {
-                    // https://commons.wikimedia.org/wiki/File:Speaker_Icon.svg
-                    Jeopardy.Overlay.image("https://upload.wikimedia.org/wikipedia/commons/2/21/Speaker_Icon.svg");
-                    Jeopardy.Overlay.audio("/resource/" + Jeopardy.SelectedGame().id() + "/" + payload.substr(6));
-                } else if (payload.startsWith("big:")) {
-                    Jeopardy.Overlay.headline(payload.substr(4))
-                } else {
-                    Jeopardy.Overlay.text(payload)
-                }
-                break;
-
-            case "ClearOverlayEvent":
-                Jeopardy.Overlay.clear();
-                break;
-        }
-    };
-
     const updateFunc = function (item) {
         if (this.id() !== item.id()) {
             return false;
@@ -117,6 +69,54 @@ document.addEventListener("DOMContentLoaded", function () {
         this.addPlayer = (player) => {
             addIfNotExists(this.Players, player)
         };
+
+        this.handleGameAction = function (message) {
+            switch (message['type']) {
+                case "CombinedEvent":
+                    for (let event of message['payload'])
+                        this.handleGameAction(event);
+                    break;
+
+                case "PlayerEvent":
+                    this.addPlayer(
+                        new Jeopardy.Player(
+                            message['payload'].id,
+                            message['payload'].name,
+                            message['payload'].color,
+                            message['payload'].points));
+                    break;
+
+                case "CategoryEvent":
+                    let colProperty = 'col' + message['payload']['column'];
+                    this.Categories[colProperty](message['payload'].label);
+                    break;
+
+                case "FieldEvent":
+                    let field = document.getElementById('row' + message['payload']['row'] + 'col' + message['payload']['col']);
+                    if (message['payload']['disabled'])
+                        field.className += "disabled";
+                    break;
+
+                case "OverlayEvent":
+                    let payload = message['question'];
+                    if (payload.startsWith("image:")) {
+                        Jeopardy.Overlay.image("/resource/" + this.id() + "/" + payload.substr(6));
+                    } else if (payload.startsWith("audio:")) {
+                        // https://commons.wikimedia.org/wiki/File:Speaker_Icon.svg
+                        Jeopardy.Overlay.image("https://upload.wikimedia.org/wikipedia/commons/2/21/Speaker_Icon.svg");
+                        Jeopardy.Overlay.audio("/resource/" + this.id() + "/" + payload.substr(6));
+                    } else if (payload.startsWith("big:")) {
+                        Jeopardy.Overlay.headline(payload.substr(4))
+                    } else {
+                        Jeopardy.Overlay.text(payload)
+                    }
+                    break;
+
+                case "ClearOverlayEvent":
+                    Jeopardy.Overlay.clear();
+                    break;
+            }
+        };
     };
 
     Jeopardy.Player = function (id, name, color, points) {
@@ -180,7 +180,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 addIfNotExists(Jeopardy.Games, item);
             }
         } else if (Jeopardy.SelectedGame) {
-            handleGameAction(JSON.parse(event.data));
+            Jeopardy.SelectedGame().handleGameAction(JSON.parse(event.data));
         }
     });
 
