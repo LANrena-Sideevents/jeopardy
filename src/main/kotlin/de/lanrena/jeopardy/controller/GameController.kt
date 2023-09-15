@@ -7,8 +7,6 @@ import de.lanrena.jeopardy.view.CategoryEvent
 import de.lanrena.jeopardy.view.CombinedEvent
 import de.lanrena.jeopardy.view.FieldEvent
 import de.lanrena.jeopardy.view.PlayerEvent
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.io.InputStream
 import java.util.*
 
@@ -24,14 +22,12 @@ class GameController(
     }
 
     suspend fun loadGameData(gameDataStream: InputStream) {
-        withContext(Dispatchers.IO) {
-            val gameDataReader = GameDataReader(gameDataStream)
-            game.categories.addAll(gameDataReader.categories)
-            game.fields.addAll(gameDataReader.fields)
-            game.resources.putAll(gameDataReader.resources)
+        with(GameDataReader.from(gameDataStream, id = game.id)) {
+            game.categories.addAll(categories)
+            game.fields.addAll(fields)
+            game.resources.putAll(resources)
             game.dataLoaded = true
         }
-
         sender.send(getCombinedState())
     }
 

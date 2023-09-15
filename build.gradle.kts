@@ -30,6 +30,8 @@ dependencies {
     implementation("org.webjars:jquery:3.6.0")
     implementation("org.webjars:tether:1.4.0")
     implementation("org.webjars:bootstrap:5.1.1")
+    implementation("org.apache.commons:commons-compress:1.21")
+    implementation("com.googlecode.json-simple:json-simple:1.1.1")
 
     testImplementation(platform("org.junit:junit-bom:${libs.versions.junit.get()}"))
     testImplementation("org.junit.jupiter:junit-jupiter")
