@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 break;
 
             case "OverlayEvent":
-                let payload = message['payload'];
+                let payload = message['question'];
                 if (payload.startsWith("image:")) {
                     Jeopardy.Overlay.image("/resource/" + Jeopardy.SelectedGame().id() + "/" + payload.substr(6));
                 } else if (payload.startsWith("audio:")) {
